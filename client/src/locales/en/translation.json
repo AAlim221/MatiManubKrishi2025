@@ -1,0 +1,31 @@
+{
+  "brandName": "MatiManubKrishi",
+  "nav": {
+    "home": "Home",
+    "soil": "Soil",
+    "crops": "Seasonal Crops",
+    "services": "Services",
+    "diseaseDetect": "Disease Detect",
+    "contact": "Contact",
+    "market": "Market"
+  },
+  "auth": {
+    "login": "Login",
+    "register": "Register"
+  },
+  "home": {
+    "servicesTitle": "Our Services",
+    "services": {
+      "disease": "Plant Disease Detection",
+      "fertilizer": "Fertilizer Suggestion",
+      "seasonal": "Seasonal Crops Suggestion",
+      "weather": "Weather Alert",
+      "soilWise": "Soil wise Crops Suggestion"
+    },
+    "blogTitle": "From Our Blog",
+    "expertsTitle": "Plant Experts",
+    "diseaseTitle": "Common Plant Diseases",
+    "reviewTitle": "Farmer Reviews",
+    "reviewMessage": "Thanks to this platform, I detected issues early and saved my crops!"
+  }
+}
