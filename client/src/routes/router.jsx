@@ -10,6 +10,7 @@ import Contact from "../Pages/Contact";
 import Crops from "../Pages/Crops";
 import market from "../Pages/market";
 import PlantDetect from "../Pages/PlantDetect";
+import SoilAdvisor from "../Pages/SoilAdvisor"
 
 const router = createBrowserRouter([
     {
@@ -70,6 +71,12 @@ const router = createBrowserRouter([
            {
                 path:'/plantdiseasedetect',
                 Component: PlantDetect,
+               
+            }
+            ,
+             {
+                path:'/soiladvisor',
+                Component: SoilAdvisor,
                
             }
         ]
