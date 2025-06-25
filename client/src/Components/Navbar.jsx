@@ -36,10 +36,10 @@ const Navbar = () => {
               <Link to="/">{t("nav.home")}</Link>
             </li>
             <li className="hover:text-green-600 cursor-pointer">
-              <Link to="/soil">{t("nav.soil")}</Link>
+              <Link to="/market">{t("nav.market")}</Link>
             </li>
             <li className="hover:text-green-600 cursor-pointer">
-              <Link to="/crops">{t("nav.crops")}</Link>
+              <Link to="/seasonalcrops">{t("nav.seasonalcrops")}</Link>
             </li>
             <li className="hover:text-green-600 cursor-pointer">
               <Link to="/services">{t("nav.services")}</Link>
@@ -98,10 +98,7 @@ const Navbar = () => {
                 <Link to="/">{t("nav.home")}</Link>
               </DropdownMenuItem>
               <DropdownMenuItem>
-                <Link to="/soil">{t("nav.soil")}</Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Link to="/crops">{t("nav.crops")}</Link>
+                <Link to="/seasonalcrops">{t("nav.seasonalcrops")}</Link>
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <Link to="/services">{t("nav.services")}</Link>

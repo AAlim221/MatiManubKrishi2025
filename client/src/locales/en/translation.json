@@ -3,7 +3,7 @@
   "nav": {
     "home": "Home",
     "soil": "Soil",
-    "crops": "Seasonal Crops",
+    "seasonalcrops": "Seasonal Crops",
     "services": "Services",
     "diseaseDetect": "Disease Detect",
     "contact": "Contact",
@@ -28,4 +28,46 @@
     "reviewTitle": "Farmer Reviews",
     "reviewMessage": "Thanks to this platform, I detected issues early and saved my crops!"
   }
+  ,
+  
+  "seasonData": {
+    "summer": {
+      "name": "(Summer)",
+      "months": "Boishakh - Joishtho (April - May)",
+      "weather": "Hot, Dry",
+      "crops": ["Aus Rice", "Jute", "Fruits (Mango, Jackfruit)", "Vegetables (Pumpkin, Gourd)"]
+    },
+    "rainy": {
+      "name": "(Rainy)",
+      "months": "Ashar - Srabon (June - July)",
+      "weather": "Heavy Rainfall",
+      "crops": ["Aman Rice (seedling stage)", "Vegetables", "Jute (harvest time)"]
+    },
+    "autumn": {
+      "name": "(Autumn)",
+      "months": "Bhadro - Ashwin (August - September)",
+      "weather": "Clear sky after rain",
+      "crops": ["Aman Rice (growing)", "Spinach", "Radish"]
+    },
+    "lateAutumn": {
+      "name": "(Late Autumn)",
+      "months": "Kartik - Ogrohayon (October - November)",
+      "weather": "Cool, Dry",
+      "crops": ["Aman Rice (harvest)", "Lentils", "Mustard", "Onion"]
+    },
+    "winter": {
+      "name": "(Winter)",
+      "months": "Poush - Magh (December - January)",
+      "weather": "Cold",
+      "crops": ["Vegetables (Cabbage, Cauliflower, Tomato)", "Wheat", "Potato", "Mustard"]
+    },
+    "spring": {
+      "name": "Boshonto (Spring)",
+      "months": "Falgun - Chaitro (February - March)",
+      "weather": "Pleasant, Colorful",
+      "crops": ["Boro Rice (seedling/growth)", "Flowers", "Tomato", "Cucumber"]
+    }
+  }
+
+
 }

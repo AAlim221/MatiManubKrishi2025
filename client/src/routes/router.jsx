@@ -1,16 +1,23 @@
-import {createBrowserRouter,} from "react-router";
+import { createBrowserRouter } from "react-router-dom"; 
 import RootLayout from "../Components/RootLayout";
-import Home from "../Pages/Home"
+import Home from "../Pages/Home";
 import Mati from "../Pages/Soil";
 import Login from "../Pages/Login";
 import Register from "../Pages/Register";
 import Services from "../Pages/Services";
 import Blog from "../Pages/Blog";
 import Contact from "../Pages/Contact";
-import Crops from "../Pages/Crops";
-import market from "../Pages/market";
+import SeasonalCrops from "../Pages/SeasonalCrops";
+import Market from "../Pages/Market";
 import PlantDetect from "../Pages/PlantDetect";
-import SoilAdvisor from "../Pages/SoilAdvisor"
+import SoilAdvisor from "../Pages/SoilAdvisor";
+import SummerPage from "../Pages/SummerPage";
+import RainyPage from "../Pages/RainyPage";
+import AutumnPage from "../Pages/AutumnPage";
+import LateAutumnPage from "../Pages/LateAutumnPage";
+import WinterPage from "../Pages/WinterPAge";
+import SpringPage from "../Pages/SpringPage";
+import AddCrops from "../Pages/AddCrops";
 
 const router = createBrowserRouter([
     {
@@ -19,68 +26,79 @@ const router = createBrowserRouter([
         children: [
             {
                 index: true,
-                Component: Home
+                Component: Home,
             },
             {
-                path:'/soil',
+                path: '/soil',
                 Component: Mati,
-               
-            }
-            ,
-             {
-                path:'/login',
+            },
+            {
+                path: '/login',
                 Component: Login,
-               
-            }
-            , {
-                path:'/register',
+            },
+            {
+                path: '/register',
                 Component: Register,
-               
-            }
-            ,
-             {
-                path:'/services',
+            },
+            {
+                path: '/services',
                 Component: Services,
-               
-            }
-            ,
-             {
-                path:'/blog',
+            },
+            {
+                path: '/blog',
                 Component: Blog,
-               
-            }
-            ,
-             {
-                path:'/contact',
+            },
+            {
+                path: '/contact',
                 Component: Contact,
-               
-            }
-            ,
-             {
-                path:'/crops',
-                Component: Crops,
-               
-            }
-                        ,
-             {
-                path:'/market',
-                Component: market,
-               
-            }
-            ,
-           {
-                path:'/plantdiseasedetect',
+            },
+            {
+                path: '/seasonalcrops',
+                Component: SeasonalCrops,
+            },
+            {
+                path: '/market',
+                Component: Market,
+            },
+            {
+                path: '/plantdiseasedetect',
                 Component: PlantDetect,
-               
-            }
-            ,
-             {
-                path:'/soiladvisor',
+            },
+            {
+                path: '/soiladvisor',
                 Component: SoilAdvisor,
-               
-            }
-        ]
+            },
+             {
+                path: '/summer',
+                Component: SummerPage,
+            },
+            {
+                path: '/rainy',
+                Component: RainyPage,
+            },
+            {
+                path: '/autumn',
+                Component:AutumnPage,
+            },
+             {
+                path: '/late-autumn',
+                Component:LateAutumnPage,
+            },
+            {
+                path: '/winter',
+                Component:WinterPage,
+            },
+            {
+                path: '/spring',
+                Component:SpringPage,
+            },
+            {
+                path: '/addcrops',
+                Component:AddCrops,
+            },
+        ],
     },
 ]);
 
 export default router;
+
