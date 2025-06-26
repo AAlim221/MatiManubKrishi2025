@@ -20,6 +20,7 @@ function AddCrops() {
     // Check if the fields are empty
     if (!seasonName || !cropNames) {
       setError("Both fields are required.");
+      setSuccessMessage('');
       return;
     }
 
@@ -29,14 +30,25 @@ function AddCrops() {
 
     try {
       // Send a POST request to the backend
-      const response = await axios.post('http://localhost:3000/crops', cropData);
-      console.log('Crop added:', response.data);
+     await axios.post('http://localhost:3000/crops', cropData);
       setSuccessMessage("Crop added successfully!");
       setSeasonName('');
       setCropNames('');
-    } catch (error) {
-      console.error('Error adding crop:', error);
-      setError('Error adding crop. Please try again.');
+    } catch (err) {
+      // Enhanced error handling
+      console.error('Error adding crop:', err);
+
+      // Check if the error has a response
+      if (err.response) {
+        // If response exists, use the message from the server
+        setError(`Error adding crop: ${err.response.data.message || err.response.statusText}`);
+      } else if (err.request) {
+        // If no response was received (e.g., network error)
+        setError("Network error, please try again.");
+      } else {
+        // If some other error occurred
+        setError(`Unexpected error: ${err.message}`);
+      }
     } finally {
       setLoading(false);
     }

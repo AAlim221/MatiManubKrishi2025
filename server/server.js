@@ -10,10 +10,10 @@ const port = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
-// MongoDB URI
+// MongoDB URI from environment variables
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.ygjzcip.mongodb.net/MatiManubKrishi?retryWrites=true&w=majority`;
 
-// Create a MongoClient with a MongoClientOptions object to set the Stable API version
+// Create MongoClient with MongoDB URI
 const client = new MongoClient(uri, {
   serverApi: {
     version: ServerApiVersion.v1,
@@ -24,27 +24,37 @@ const client = new MongoClient(uri, {
 
 async function run() {
   try {
-    // Connect the client to the server (optional starting in v4.7)
+    // Connect to MongoDB
+    console.log("Connecting to MongoDB...");
     await client.connect();
+    console.log("Successfully connected to MongoDB!");
 
     const cropsCollection = client.db("MatiManubKrishi").collection("Crops");
 
-    // Add a new crop
+    // Add a new crop - POST /crops
     app.post("/crops", async (req, res) => {
-      const crop = req.body; // Get the crop data from the request body
-      console.log(crop); // Log the crop to console (for debugging purposes)
+      const crop = req.body;
+      console.log("Received crop data:", crop); // Log to verify data
+
+      // Validate incoming data
+      if (!crop.seasonName || !crop.cropNames) {
+        return res.status(400).send({
+          message: "Both seasonName and cropNames are required.",
+        });
+      }
 
       try {
-        // Insert the crop into the database
+        // Insert crop into MongoDB
         const result = await cropsCollection.insertOne(crop);
+        console.log("Crop added to database:", result); // Log successful insert
 
-        // Send a response with the result of the insertion
+        // Send response to client
         res.status(201).send({
           message: "Crop added successfully",
-          cropId: result.insertedId, // Return the inserted crop ID
+          cropId: result.insertedId,
         });
       } catch (error) {
-        // If an error occurs, send a failure response
+        console.error("Error inserting crop:", error.message);
         res.status(500).send({
           message: "Error adding crop",
           error: error.message,
@@ -52,12 +62,12 @@ async function run() {
       }
     });
 
-    // Send a ping to confirm a successful connection
+    // Confirm MongoDB connection
     await client.db("admin").command({ ping: 1 });
-    console.log("Successfully connected to MongoDB!");
+    console.log("MongoDB connection is healthy!");
 
   } catch (error) {
-    console.error("Error connecting to MongoDB:", error);
+    console.error("Error connecting to MongoDB:", error.message);
   }
 }
 
@@ -68,10 +78,15 @@ process.on("SIGINT", async () => {
   process.exit(0);
 });
 
+// Test route for checking if the server is running
 app.get("/", (req, res) => {
   res.send("MatiManubKrishi is Cooking");
 });
 
+// Ensure the backend is running on the specified port
 app.listen(port, () => {
   console.log(`MatiManubKrishi server is running on port ${port}`);
 });
+
+// Start MongoDB connection and the server
+run().catch(console.error);
