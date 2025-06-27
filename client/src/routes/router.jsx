@@ -18,87 +18,49 @@ import WinterPage from "../Pages/WinterPAge";
 import SpringPage from "../Pages/SpringPage";
 import AddCrops from "../Pages/AddCrops";
 import BlogDetails from "../Pages/BlogDetails";
+import ProtectedRoute from "../routes/ProtectedRoute";
 
 const router = createBrowserRouter([
-    {
-        path: "/",
-        Component: RootLayout,
-        children: [
-            {
-                index: true,
-                Component: Home,
-            },
-            {
-                path: '/soil',
-                Component: Mati,
-            },
-            {
-                path: '/login',
-                Component: Login,
-            },
-            {
-                path: '/register',
-                Component: Register,
-            },
-            {
-                path: '/services',
-                Component: Services,
-            },
-            {
-                path: '/blogdetails',
-                Component: BlogDetails,
-            },
-            {
-                path: '/contact',
-                Component: Contact,
-            },
-            {
-                path: '/seasonalcrops',
-                Component: SeasonalCrops,
-            },
-            {
-                path: '/market',
-                Component: Market,
-            },
-            {
-                path: '/plantdiseasedetect',
-                Component: PlantDetect,
-            },
-            {
-                path: '/soiladvisor',
-                Component: SoilAdvisor,
-            },
-             {
-                path: '/summer',
-                Component: SummerPage,
-            },
-            {
-                path: '/rainy',
-                Component: RainyPage,
-            },
-            {
-                path: '/autumn',
-                Component:AutumnPage,
-            },
-             {
-                path: '/late-autumn',
-                Component:LateAutumnPage,
-            },
-            {
-                path: '/winter',
-                Component:WinterPage,
-            },
-            {
-                path: '/spring',
-                Component:SpringPage,
-            },
-            {
-                path: '/addcrops',
-                Component:AddCrops,
-            },
-        ],
-    },
+  {
+    path: "/",
+    Component: RootLayout,
+    children: [
+      { index: true, Component: Home },
+      { path: "/soil", Component: Mati },
+      { path: "/login", Component: Login },
+      { path: "/register", Component: Register },
+      { path: "/services", Component: Services },
+      { path: "/blogdetails", Component: BlogDetails },
+      { path: "/contact", Component: Contact },
+      { path: "/seasonalcrops", Component: SeasonalCrops },
+      { path: "/plantdiseasedetect", Component: PlantDetect },
+      { path: "/soiladvisor", Component: SoilAdvisor },
+      { path: "/summer", Component: SummerPage },
+      { path: "/rainy", Component: RainyPage },
+      { path: "/autumn", Component: AutumnPage },
+      { path: "/late-autumn", Component: LateAutumnPage },
+      { path: "/winter", Component: WinterPage },
+      { path: "/spring", Component: SpringPage },
+
+      // 🔒 Protected Routes
+      {
+        path: "/addcrops",
+        Component: () => (
+          <ProtectedRoute>
+            <AddCrops />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/market",
+        Component: () => (
+          <ProtectedRoute>
+            <Market />
+          </ProtectedRoute>
+        ),
+      },
+    ],
+  },
 ]);
 
 export default router;
-
