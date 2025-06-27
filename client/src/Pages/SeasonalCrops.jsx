@@ -7,7 +7,7 @@ const seasonData = [
     months: 'Boishakh - Joishtho (April - May)',
     weather: 'Hot, Dry',
     crops: ['Aus Rice', 'Jute', 'Fruits (Mango, Jackfruit)', 'Vegetables (Pumpkin, Gourd)'],
-    image: '/assets/Season/Summer.webp',
+    image: '/assets/Season/Summer.jpg',
     route: '/summer'
   },
   {
@@ -23,7 +23,7 @@ const seasonData = [
     months: 'Bhadro - Ashwin (August - September)',
     weather: 'Clear sky after rain',
     crops: ['Aman Rice (growing)', 'Spinach', 'Radish'],
-    image: '/assets/Season/Autumn.avif',
+    image: '/assets/Season/Autumn.jpg',
     route: '/autumn'
   },
   {
@@ -31,7 +31,7 @@ const seasonData = [
     months: 'Kartik - Ogrohayon (October - November)',
     weather: 'Cool, Dry',
     crops: ['Aman Rice (harvest)', 'Lentils', 'Mustard', 'Onion'],
-    image: '/assets/Season/Late Autumn.jpg',
+    image: '/assets/Season/LateAutumn.jpg',
     route: '/late-autumn'
   },
   {
@@ -39,7 +39,7 @@ const seasonData = [
     months: 'Poush - Magh (December - January)',
     weather: 'Cold',
     crops: ['Vegetables (Cabbage, Cauliflower, Tomato)', 'Wheat', 'Potato', 'Mustard'],
-    image: '/assets/Season/Winter.avif',
+    image: '/assets/Season/Winter.jpg',
     route: '/winter'
   },
   {
@@ -47,7 +47,7 @@ const seasonData = [
     months: 'Falgun - Chaitro (February - March)',
     weather: 'Pleasant, Colorful',
     crops: ['Boro Rice (seedling/growth)', 'Flowers', 'Tomato', 'Cucumber'],
-    image: '/assets/Season/spring.jpeg',
+    image: '/assets/Season/Spring.jpg',
     route: '/spring'
   }
 ];
