@@ -40,72 +40,79 @@ const Home = () => {
           className="flex w-full h-[400px] overflow-x-auto snap-x snap-mandatory scroll-smooth"
         >
           {bannerImages.map((image, i) => (
-            <div
-              key={i}
-              className="min-w-full h-full flex-shrink-0 snap-center"
-            >
-              <img
-                src={image}
-                alt={`Banner ${i + 1}`}
-                className="w-full h-full object-cover"
-              />
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Services Section */}
-      <section className="max-w-7xl mx-auto px-4">
-        <h2 className="text-3xl font-bold text-green-700 mb-6">
-          {t("home.servicesTitle")}
-        </h2>
-        <div className="grid md:grid-cols-4 gap-6">
-          {[ 
-            t("home.services.disease"),
-            t("home.services.fertilizer"),
-            t("home.services.seasonal"),
-            t("home.services.weather"),
-            t("home.services.soilWise")
-          ].map((service, idx) => (
-            <div
-              key={idx}
-              className="bg-white rounded-lg shadow p-6 hover:bg-green-50 transition"
-            >
-              <h3 className="text-lg font-semibold text-green-800 mb-2">{service}</h3>
-              <p className="text-gray-600 text-sm">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla quam.
-              </p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Blog Section */}
-      <section className="bg-gray-50 py-16">
-        <div className="max-w-7xl mx-auto px-4">
-          <h2 className="text-3xl font-bold text-green-700 mb-6">{t("home.blogTitle")}</h2>
-          <div className="grid md:grid-cols-3 gap-6">
-            {[1, 2, 3].map((num) => (
-              <div key={num} className="bg-white shadow rounded-lg overflow-hidden">
+            <div key={i} className="min-w-full h-full flex-shrink-0 snap-center px-2">
+              <div className="h-full bg-white rounded-t-2xl overflow-hidden">
                 <img
-                  src={`https://source.unsplash.com/400x250/?plant,farmer,${num}`}
-                  alt="Blog"
-                  className="w-full h-48 object-cover"
+                  src={image}
+                  alt={`Banner ${i + 1}`}
+                  className="w-full h-full object-cover"
                 />
-                <div className="p-4">
-                  <h3 className="text-lg font-bold mb-2">Healthy Soil, Healthy Plant</h3>
-                  <p className="text-sm text-gray-600 mb-3">
-                    Discover how healthy soil contributes to sustainable agriculture.
-                  </p>
-                  <Link to="/blog" className="text-green-600 text-sm font-semibold inline-flex items-center">
-                    Read More <ChevronRight className="w-4 h-4 ml-1" />
-                  </Link>
-                </div>
               </div>
-            ))}
+            </div>
+          ))}
+        </div>
+      </section>
+
+     {/* Services Section */}
+<section className="max-w-7xl mx-auto px-4">
+  <h2 className="text-3xl font-bold text-green-700 mb-10 text-center">
+    {t("home.servicesTitle")}
+  </h2>
+  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    {[
+      { icon: "🦠", label: t("home.services.disease") },
+      { icon: "💊", label: t("home.services.fertilizer") },
+      { icon: "🌾", label: t("home.services.seasonal") },
+      { icon: "⛅", label: t("home.services.weather") },
+      { icon: "🧪", label: t("home.services.soilWise") }
+    ].map((service, idx) => (
+      <div
+        key={idx}
+        className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 text-center"
+      >
+        <div className="text-4xl mb-4">{service.icon}</div>
+        <h3 className="text-xl font-semibold text-green-800 mb-2">{service.label}</h3>
+        <p className="text-gray-600 text-sm">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla quam.
+        </p>
+      </div>
+    ))}
+  </div>
+</section>
+
+     {/* Blog Section */}
+<section className="bg-gray-50 py-16">
+  <div className="max-w-7xl mx-auto px-4">
+    <h2 className="text-3xl font-bold text-green-700 mb-10 text-center">{t("home.blogTitle")}</h2>
+    <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-8">
+      {[1, 2, 3].map((num) => (
+        <div
+          key={num}
+          className="bg-white rounded-xl overflow-hidden shadow hover:shadow-xl transition-transform transform hover:-translate-y-1 duration-300"
+        >
+          <img
+            src={`https://source.unsplash.com/400x250/?plant,farmer,${num}`}
+            alt="Blog"
+            className="w-full h-48 object-cover"
+          />
+          <div className="p-5">
+            <h3 className="text-xl font-semibold text-green-800 mb-2">Healthy Soil, Healthy Plant</h3>
+            <p className="text-sm text-gray-600 mb-4">
+              Discover how healthy soil contributes to sustainable agriculture and productivity.
+            </p>
+            <Link
+              to="/blogdetails"
+              className="text-green-600 text-sm font-semibold inline-flex items-center hover:underline"
+            >
+              Read More <ChevronRight className="w-4 h-4 ml-1" />
+            </Link>
           </div>
         </div>
-      </section>
+      ))}
+    </div>
+  </div>
+</section>
+
 
       {/* Expert Doctors Section */}
       <section className="max-w-7xl mx-auto px-4">

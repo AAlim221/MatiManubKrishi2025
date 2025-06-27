@@ -5,7 +5,6 @@ import Mati from "../Pages/Soil";
 import Login from "../Pages/Login";
 import Register from "../Pages/Register";
 import Services from "../Pages/Services";
-import Blog from "../Pages/Blog";
 import Contact from "../Pages/Contact";
 import SeasonalCrops from "../Pages/SeasonalCrops";
 import Market from "../Pages/Market";
@@ -18,6 +17,7 @@ import LateAutumnPage from "../Pages/LateAutumnPage";
 import WinterPage from "../Pages/WinterPAge";
 import SpringPage from "../Pages/SpringPage";
 import AddCrops from "../Pages/AddCrops";
+import BlogDetails from "../Pages/BlogDetails";
 
 const router = createBrowserRouter([
     {
@@ -45,8 +45,8 @@ const router = createBrowserRouter([
                 Component: Services,
             },
             {
-                path: '/blog',
-                Component: Blog,
+                path: '/blogdetails',
+                Component: BlogDetails,
             },
             {
                 path: '/contact',
