@@ -31,17 +31,10 @@ async function run() {
 
     const cropsCollection = client.db("MatiManubKrishi").collection("Crops");
 
-    // Add a new crop - POST /crops
+    // POST /crops - Add a new crop
     app.post("/crops", async (req, res) => {
       const crop = req.body;
       console.log("Received crop data:", crop); // Log to verify data
-
-      // Validate incoming data
-      if (!crop.seasonName || !crop.cropNames) {
-        return res.status(400).send({
-          message: "Both seasonName and cropNames are required.",
-        });
-      }
 
       try {
         // Insert crop into MongoDB
@@ -57,6 +50,21 @@ async function run() {
         console.error("Error inserting crop:", error.message);
         res.status(500).send({
           message: "Error adding crop",
+          error: error.message,
+        });
+      }
+    });
+
+    // GET /crops - Retrieve all crops
+    app.get("/crops", async (req, res) => {
+      try {
+        // Get all crops from MongoDB
+        const crops = await cropsCollection.find({}).toArray();
+        res.status(200).send(crops); // Send list of crops
+      } catch (error) {
+        console.error("Error retrieving crops:", error.message);
+        res.status(500).send({
+          message: "Error retrieving crops",
           error: error.message,
         });
       }
