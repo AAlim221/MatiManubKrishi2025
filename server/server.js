@@ -39,7 +39,8 @@ async function run() {
   try {
     await client.connect();
     const cropsCollection = client.db("MatiManubKrishi").collection("Crops");
-
+    const productsCollection = client.db("MatiManubKrishi").collection("Products");
+    const ordersCollection = client.db("MatiManubKrishi").collection("Orders");
     // POST with image upload
     app.post("/crops", upload.single("cropImage"), async (req, res) => {
       try {
@@ -66,10 +67,57 @@ async function run() {
         res.status(500).send({ message: "Error retrieving crops", error: error.message });
       }
     });
+    // ==== Products Routes ====
+
+    // POST new product
+    app.post("/products", async (req, res) => {
+      try {
+        const productData = req.body;
+        const result = await productsCollection.insertOne(productData);
+        res.status(201).send({
+          message: "Product added successfully",
+          productId: result.insertedId,
+        });
+      } catch (error) {
+        console.error("Product upload error:", error.message);
+        res.status(500).send({ message: "Failed to add product", error: error.message });
+      }
+    });
+
+    // GET all products
+    app.get("/products", async (req, res) => {
+      try {
+        const products = await productsCollection.find({}).toArray();
+        res.status(200).send(products);
+      } catch (error) {
+        res.status(500).send({ message: "Error retrieving products", error: error.message });
+      }
+    });
 
     app.get("/", (req, res) => {
       res.send("MatiManubKrishi is Cooking");
     });
+     // POST new orders
+    // Save invoice to 'orders' collection
+app.post("/orders", async (req, res) => {
+  try {
+    const invoice = req.body;
+
+    if (!invoice || !invoice.cart || !Array.isArray(invoice.cart) || invoice.cart.length === 0) {
+      return res.status(400).json({ message: "Invalid invoice data" });
+    }
+
+    const result = await ordersCollection.insertOne(invoice); // Use ordersCollection, not productsCollection
+    res.status(201).send({
+      message: "Invoice saved successfully",
+      orderId: result.insertedId,
+    });
+  } catch (error) {
+    console.error("Invoice save error:", error.message);
+    res.status(500).send({ message: "Failed to save invoice", error: error.message });
+  }
+});
+
 
     await client.db("admin").command({ ping: 1 });
     console.log("MongoDB connection is healthy!");
