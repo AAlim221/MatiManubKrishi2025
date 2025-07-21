@@ -5,7 +5,8 @@
     "soil": "Soil",
     "seasonalcrops": "Seasonal Crops",
     "services": "Services",
-    "diseaseDetect": "Disease Detect",
+    "plantdiseaseDetect": "Plant Disease Detection ",
+     "diseaseInfoAdd": "Add Disease Info",
     "contact": "Contact",
     "market": "Market"
   },

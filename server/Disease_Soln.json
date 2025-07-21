@@ -1,0 +1,192 @@
+{
+  "Apple___Apple_scab": {
+    "prescription": "Use resistant apple varieties; apply fungicide at bud break and repeat every 10–14 days during the growing season.",
+    "pesticide": "Mancozeb or Captan 50 WP",
+    "application_instructions": "Spray 20 grams in 10 liters of water before bud break and repeat application every 10–14 days."
+  },
+  "Apple___Black_rot": {
+    "prescription": "Remove mummified fruits and infected twigs; apply fungicide pre-bloom and during growing season.",
+    "pesticide": "Thiophanate-methyl or Captan",
+    "application_instructions": "Spray 25 grams per 10 liters of water every 7–14 days during pre-bloom and early season."
+  },
+  "Apple___Cedar_apple_rust": {
+    "prescription": "Apply fungicide early in the spring; remove nearby cedar/juniper trees to reduce infection source.",
+    "pesticide": "Myclobutanil or Propiconazole",
+    "application_instructions": "Spray every 10–14 days starting at bud swell until early summer."
+  },
+  "Apple___healthy": {
+    "prescription": "No treatment required. Maintain orchard hygiene.",
+    "pesticide": "None",
+    "application_instructions": "Monitor regularly for early signs of disease."
+  },
+  "Blueberry___healthy": {
+    "prescription": "Maintain proper pruning and weed control.",
+    "pesticide": "None",
+    "application_instructions": "Ensure adequate spacing and soil drainage."
+  },
+  "Cherry_(including_sour)___Powdery_mildew": {
+    "prescription": "Apply sulfur-based fungicides and prune to improve airflow.",
+    "pesticide": "Sulfur 80 WP or Potassium bicarbonate",
+    "application_instructions": "Spray early morning every 7–10 days starting at bud break."
+  },
+  "Cherry_(including_sour)___healthy": {
+    "prescription": "No treatment necessary; maintain good orchard practices.",
+    "pesticide": "None",
+    "application_instructions": "Continue regular monitoring."
+  },
+  "Corn_(maize)___Cercospora_leaf_spot Gray_leaf_spot": {
+    "prescription": "Practice crop rotation; apply fungicide at tasseling stage.",
+    "pesticide": "Strobilurin fungicides (Azoxystrobin) or Triazoles",
+    "application_instructions": "Apply fungicide at tasseling and repeat if conditions favor disease."
+  },
+  "Corn_(maize)___Common_rust_": {
+    "prescription": "Use resistant hybrids; apply fungicide if disease severity is high.",
+    "pesticide": "Azoxystrobin",
+    "application_instructions": "Spray when rust pustules first appear and repeat every 7–14 days as needed."
+  },
+  "Corn_(maize)___Northern_Leaf_Blight": {
+    "prescription": "Plant resistant varieties and use foliar fungicides under disease pressure.",
+    "pesticide": "Propiconazole or Tebuconazole",
+    "application_instructions": "Scout fields regularly; apply fungicide at early signs of disease."
+  },
+  "Corn_(maize)___healthy": {
+    "prescription": "Maintain good field sanitation and crop rotation.",
+    "pesticide": "None",
+    "application_instructions": "Monitor for pest and disease incidence."
+  },
+  "Grape___Black_rot": {
+    "prescription": "Remove infected leaves; apply fungicide pre-bloom and during growing season.",
+    "pesticide": "Myclobutanil or Mancozeb",
+    "application_instructions": "Spray every 7–10 days until berries reach pea size."
+  },
+  "Grape___Esca_(Black_Measles)": {
+    "prescription": "No chemical control; remove and destroy infected vines.",
+    "pesticide": "None",
+    "application_instructions": "Avoid pruning during wet weather to reduce spread."
+  },
+  "Grape___Leaf_blight_(Isariopsis_Leaf_Spot)": {
+    "prescription": "Apply contact fungicides and improve canopy ventilation.",
+    "pesticide": "Chlorothalonil",
+    "application_instructions": "Begin spraying when new leaves emerge; repeat every 7–14 days if needed."
+  },
+  "Grape___healthy": {
+    "prescription": "Maintain balanced fertilization and regular pruning.",
+    "pesticide": "None",
+    "application_instructions": "Monitor regularly for pest and disease."
+  },
+  "Orange___Haunglongbing_(Citrus_greening)": {
+    "prescription": "No cure available; promptly remove infected trees to prevent spread.",
+    "pesticide": "Imidacloprid (targets psyllid vector)",
+    "application_instructions": "Apply systemic insecticide as per label instructions; maintain psyllid control programs."
+  },
+  "Peach___Bacterial_spot": {
+    "prescription": "Use copper-based sprays; plant resistant varieties.",
+    "pesticide": "Copper hydroxide or Copper oxychloride",
+    "application_instructions": "Spray during early growing season; avoid overhead irrigation."
+  },
+  "Peach___healthy": {
+    "prescription": "Regular pruning and fertilization to maintain tree health.",
+    "pesticide": "None",
+    "application_instructions": "Monitor for early disease symptoms."
+  },
+  "Pepper,_bell___Bacterial_spot": {
+    "prescription": "Use disease-free seeds; apply copper-based sprays to manage bacterial spot.",
+    "pesticide": "Copper hydroxide plus Mancozeb",
+    "application_instructions": "Spray every 7–10 days; avoid working in wet fields to prevent spread."
+  },
+  "Pepper,_bell___healthy": {
+    "prescription": "Continue monitoring and maintain balanced fertilization.",
+    "pesticide": "None",
+    "application_instructions": "Avoid excessive nitrogen fertilizers to reduce susceptibility."
+  },
+  "Potato___Early_blight": {
+    "prescription": "Apply fungicides starting at flowering to prevent early blight.",
+    "pesticide": "Chlorothalonil or Mancozeb",
+    "application_instructions": "Spray every 7–10 days until disease pressure subsides; remove and destroy crop debris."
+  },
+  "Potato___Late_blight": {
+    "prescription": "Use certified seed and systemic fungicides to prevent late blight.",
+    "pesticide": "Metalaxyl or Mancozeb",
+    "application_instructions": "Apply fungicide preventively in wet conditions; avoid overhead irrigation."
+  },
+  "Potato___healthy": {
+    "prescription": "Maintain well-drained soil and good crop hygiene.",
+    "pesticide": "None",
+    "application_instructions": "Monitor regularly for disease symptoms."
+  },
+  "Raspberry___healthy": {
+    "prescription": "Prune in early spring and monitor for pests.",
+    "pesticide": "None",
+    "application_instructions": "Maintain good air circulation and remove diseased canes."
+  },
+  "Soybean___healthy": {
+    "prescription": "Scout fields regularly for leaf spot and rust diseases.",
+    "pesticide": "None",
+    "application_instructions": "Practice crop rotation and field sanitation."
+  },
+  "Squash___Powdery_mildew": {
+    "prescription": "Apply fungicides at first signs of powdery mildew.",
+    "pesticide": "Sulfur or Neem oil",
+    "application_instructions": "Spray every 7–10 days ensuring good airflow between plants."
+  },
+  "Strawberry___Leaf_scorch": {
+    "prescription": "Remove infected leaves and apply fungicides promptly.",
+    "pesticide": "Captan or Thiophanate-methyl",
+    "application_instructions": "Avoid wetting foliage during irrigation; spray every 7–14 days if needed."
+  },
+  "Strawberry___healthy": {
+    "prescription": "Ensure good drainage and adequate sunlight.",
+    "pesticide": "None",
+    "application_instructions": "Maintain good field hygiene and monitor regularly."
+  },
+  "Tomato___Bacterial_spot": {
+    "prescription": "Apply copper sprays and rotate crops to manage bacterial spot.",
+    "pesticide": "Copper hydroxide",
+    "application_instructions": "Spray every 7–10 days during warm, wet conditions."
+  },
+  "Tomato___Early_blight": {
+    "prescription": "Apply fungicide every 7–10 days; remove lower leaves to improve airflow.",
+    "pesticide": "Chlorothalonil or Mancozeb",
+    "application_instructions": "Start spraying at first sign of disease and continue through season."
+  },
+  "Tomato___Late_blight": {
+    "prescription": "Use resistant varieties and apply systemic fungicides proactively.",
+    "pesticide": "Metalaxyl or Fluopicolide",
+    "application_instructions": "Spray preventively especially during wet weather; avoid overhead irrigation."
+  },
+  "Tomato___Leaf_Mold": {
+    "prescription": "Improve ventilation and apply sulfur or copper-based sprays.",
+    "pesticide": "Sulfur or Copper-based fungicides",
+    "application_instructions": "Spray every 7–14 days; avoid wetting leaves while watering."
+  },
+  "Tomato___Septoria_leaf_spot": {
+    "prescription": "Remove infected leaves and apply fungicides regularly.",
+    "pesticide": "Chlorothalonil",
+    "application_instructions": "Rotate crops and avoid overhead watering."
+  },
+  "Tomato___Spider_mites Two-spotted_spider_mite": {
+    "prescription": "Spray neem oil or insecticidal soap to control spider mites.",
+    "pesticide": "Abamectin or Neem oil",
+    "application_instructions": "Maintain high humidity and avoid water stress; spray every 7 days if infestation persists."
+  },
+  "Tomato___Target_Spot": {
+    "prescription": "Apply fungicides during early fruit set to prevent target spot.",
+    "pesticide": "Azoxystrobin",
+    "application_instructions": "Spray every 7–10 days; remove and destroy infected leaves."
+  },
+  "Tomato___Tomato_Yellow_Leaf_Curl_Virus": {
+    "prescription": "Use resistant varieties and control whitefly vectors.",
+    "pesticide": "Imidacloprid",
+    "application_instructions": "Apply insecticide every 10–14 days; remove infected plants immediately."
+  },
+  "Tomato___Tomato_mosaic_virus": {
+    "prescription": "Remove infected plants and sanitize tools to prevent spread.",
+    "pesticide": "None",
+    "application_instructions": "Control aphids; avoid smoking in the field."
+  },
+  "Tomato___healthy": {
+    "prescription": "Maintain balanced fertilization and monitor plants weekly.",
+    "pesticide": "None",
+    "application_instructions": "Ensure adequate watering and nutrient supply."
+  }
+}

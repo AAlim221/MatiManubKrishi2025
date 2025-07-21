@@ -5,8 +5,9 @@
     "soil": "মাটি",
     "seasonalcrops": "মৌসুমি ফসল",
     "services": "সেবা",
-    "diseaseDetect": "রোগ শনাক্ত",
+    "plantdiseaseDetect": "রোগ শনাক্ত",
     "contact": "যোগাযোগ",
+    "diseaseInfoAdd": "রোগের তথ্য দিন",
     "market": "বাজার"
   },
   "auth": {

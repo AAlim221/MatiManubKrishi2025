@@ -8,9 +8,12 @@ import Login from "../Pages/Login";
 import Register from "../Pages/Register";
 import Services from "../Pages/Services";
 import Contact from "../Pages/Contact";
+import AllCrops from "../Pages/AllCrops";
+import CropDetails from "../Pages/CropDetails";
 import SeasonalCrops from "../Pages/SeasonalCrops";
 import Market from "../Pages/Market";
 import PlantDetect from "../Pages/PlantDetect";
+import DiseaseInfoAdd from "../Pages/DiseaseInfoAdd";
 import SoilAdvisor from "../Pages/SoilAdvisor";
 import SummerPage from "../Pages/SummerPage";
 import RainyPage from "../Pages/RainyPage";
@@ -25,6 +28,7 @@ import CartDetails from "../Pages/CartDetails";
 import AdminHome from "../Pages/AdminDash/AdminHome";
 import AddProduct from "../Pages/AdminDash/AddProduct";
 
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -32,13 +36,14 @@ const router = createBrowserRouter([
     children: [
       { index: true, Component: Home },
       { path: "soil", Component: Mati },
+      { path: "allcrops", Component: AllCrops },
+      { path: "crop/:id", element: <CropDetails /> },
       { path: "login", Component: Login },
       { path: "register", Component: Register },
       { path: "services", Component: Services },
       { path: "blogdetails", Component: BlogDetails },
       { path: "contact", Component: Contact },
       { path: "seasonalcrops", Component: SeasonalCrops },
-      { path: "plantdiseasedetect", Component: PlantDetect },
       { path: "soiladvisor", Component: SoilAdvisor },
       { path: "summer", Component: SummerPage },
       { path: "rainy", Component: RainyPage },
@@ -50,15 +55,24 @@ const router = createBrowserRouter([
       // 🔒 Protected User Routes
       {
         path: "addcrops",
-        Component: () => (
+        element: (
           <ProtectedRoute>
             <AddCrops />
           </ProtectedRoute>
         ),
       },
       {
+        path: "plantdiseasedetect",
+        element: (
+          <ProtectedRoute>
+            <PlantDetect />
+          </ProtectedRoute>
+        ),
+      },
+      
+      {
         path: "market",
-        Component: () => (
+        element: (
           <ProtectedRoute>
             <Market />
           </ProtectedRoute>
@@ -66,7 +80,7 @@ const router = createBrowserRouter([
       },
       {
         path: "cart",
-        Component: () => (
+        element: (
           <ProtectedRoute>
             <CartDetails />
           </ProtectedRoute>
@@ -83,6 +97,7 @@ const router = createBrowserRouter([
       { index: true, Component: AdminHome },
       { path: "addcrops", Component: AddCrops },
       { path: "addproduct", Component: AddProduct },
+      { path: "diseaseInfoAdd", Component: DiseaseInfoAdd },
     ],
   },
 ]);
