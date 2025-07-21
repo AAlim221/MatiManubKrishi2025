@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
+
 const seasonData = [
   {
     name: '(Summer)',
@@ -52,38 +53,10 @@ const seasonData = [
 ];
 
 function SeasonalCrops() {
-  const [searchTerm, setSearchTerm] = useState('');
-
-  const filteredData = seasonData.filter(season =>
-    season.crops.some(crop =>
-      crop.toLowerCase().includes(searchTerm.toLowerCase())
-    )
-  );
-
   return (
     <div className="p-6">
-      {/* Top Bar */}
-      <div className="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
-        {/* Add Crops Button */}
-        <Link to="/addcrops">
-          <button className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-5 rounded-lg shadow-md transition">
-            ➕ Add Crops
-          </button>
-        </Link>
-
-        {/* Search Bar */}
-        <input
-          type="text"
-          placeholder="🔍 Search crops..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-full sm:w-80 p-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-400"
-        />
-      </div>
-
-      {/* Season Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredData.map((season, index) => (
+        {seasonData.map((season, index) => (
           <Link key={index} to={season.route}>
             <div className="bg-white rounded-2xl shadow hover:shadow-xl overflow-hidden transition-transform transform hover:-translate-y-1">
               <img

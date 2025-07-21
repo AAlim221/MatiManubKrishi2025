@@ -1,5 +1,7 @@
-import { createBrowserRouter } from "react-router-dom"; 
+import { createBrowserRouter } from "react-router-dom";
 import RootLayout from "../Components/RootLayout";
+import AdminLayout from "../Components/AdminLayout";
+
 import Home from "../Pages/Home";
 import Mati from "../Pages/Soil";
 import Login from "../Pages/Login";
@@ -16,9 +18,12 @@ import AutumnPage from "../Pages/AutumnPage";
 import LateAutumnPage from "../Pages/LateAutumnPage";
 import WinterPage from "../Pages/WinterPAge";
 import SpringPage from "../Pages/SpringPage";
-import AddCrops from "../Pages/AddCrops";
+import AddCrops from "../Pages/AdminDash/AddCrops";
 import BlogDetails from "../Pages/BlogDetails";
 import ProtectedRoute from "../routes/ProtectedRoute";
+import CartDetails from "../Pages/CartDetails";
+import AdminHome from "../Pages/AdminDash/AdminHome";
+import AddProduct from "../Pages/AdminDash/AddProduct";
 
 const router = createBrowserRouter([
   {
@@ -26,25 +31,25 @@ const router = createBrowserRouter([
     Component: RootLayout,
     children: [
       { index: true, Component: Home },
-      { path: "/soil", Component: Mati },
-      { path: "/login", Component: Login },
-      { path: "/register", Component: Register },
-      { path: "/services", Component: Services },
-      { path: "/blogdetails", Component: BlogDetails },
-      { path: "/contact", Component: Contact },
-      { path: "/seasonalcrops", Component: SeasonalCrops },
-      { path: "/plantdiseasedetect", Component: PlantDetect },
-      { path: "/soiladvisor", Component: SoilAdvisor },
-      { path: "/summer", Component: SummerPage },
-      { path: "/rainy", Component: RainyPage },
-      { path: "/autumn", Component: AutumnPage },
-      { path: "/late-autumn", Component: LateAutumnPage },
-      { path: "/winter", Component: WinterPage },
-      { path: "/spring", Component: SpringPage },
+      { path: "soil", Component: Mati },
+      { path: "login", Component: Login },
+      { path: "register", Component: Register },
+      { path: "services", Component: Services },
+      { path: "blogdetails", Component: BlogDetails },
+      { path: "contact", Component: Contact },
+      { path: "seasonalcrops", Component: SeasonalCrops },
+      { path: "plantdiseasedetect", Component: PlantDetect },
+      { path: "soiladvisor", Component: SoilAdvisor },
+      { path: "summer", Component: SummerPage },
+      { path: "rainy", Component: RainyPage },
+      { path: "autumn", Component: AutumnPage },
+      { path: "late-autumn", Component: LateAutumnPage },
+      { path: "winter", Component: WinterPage },
+      { path: "spring", Component: SpringPage },
 
-      // 🔒 Protected Routes
+      // 🔒 Protected User Routes
       {
-        path: "/addcrops",
+        path: "addcrops",
         Component: () => (
           <ProtectedRoute>
             <AddCrops />
@@ -52,13 +57,32 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/market",
+        path: "market",
         Component: () => (
           <ProtectedRoute>
             <Market />
           </ProtectedRoute>
         ),
       },
+      {
+        path: "cart",
+        Component: () => (
+          <ProtectedRoute>
+            <CartDetails />
+          </ProtectedRoute>
+        ),
+      },
+    ],
+  },
+
+  // 👨‍💼 Admin Section (separate layout, prefixed with /admin)
+  {
+    path: "/admin",
+    Component: AdminLayout,
+    children: [
+      { index: true, Component: AdminHome },
+      { path: "addcrops", Component: AddCrops },
+      { path: "addproduct", Component: AddProduct },
     ],
   },
 ]);
