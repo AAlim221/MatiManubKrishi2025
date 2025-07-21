@@ -21,12 +21,15 @@ import AutumnPage from "../Pages/AutumnPage";
 import LateAutumnPage from "../Pages/LateAutumnPage";
 import WinterPage from "../Pages/WinterPAge";
 import SpringPage from "../Pages/SpringPage";
+import DoctorDetails from "../Pages/DoctorDetails";
 import AddCrops from "../Pages/AdminDash/AddCrops";
-import BlogDetails from "../Pages/BlogDetails";
+import Blogs from "../Components/Blogs";
 import ProtectedRoute from "../routes/ProtectedRoute";
 import CartDetails from "../Pages/CartDetails";
 import AdminHome from "../Pages/AdminDash/AdminHome";
 import AddProduct from "../Pages/AdminDash/AddProduct";
+import Blog from "../Components/Blog";
+
 
 
 const router = createBrowserRouter([
@@ -38,10 +41,11 @@ const router = createBrowserRouter([
       { path: "soil", Component: Mati },
       { path: "allcrops", Component: AllCrops },
       { path: "crop/:id", element: <CropDetails /> },
+       { path: "blog/:id", element: <Blog /> },
       { path: "login", Component: Login },
       { path: "register", Component: Register },
       { path: "services", Component: Services },
-      { path: "blogdetails", Component: BlogDetails },
+      { path: "blogs", Component: Blogs },
       { path: "contact", Component: Contact },
       { path: "seasonalcrops", Component: SeasonalCrops },
       { path: "soiladvisor", Component: SoilAdvisor },
@@ -51,6 +55,7 @@ const router = createBrowserRouter([
       { path: "late-autumn", Component: LateAutumnPage },
       { path: "winter", Component: WinterPage },
       { path: "spring", Component: SpringPage },
+      { path: "/doctor/:id", Component: DoctorDetails },
 
       // 🔒 Protected User Routes
       {
