@@ -62,7 +62,7 @@ const Home = () => {
       </section>
 
       {/* Services Section */}
-      <section className="max-w-7xl mx-auto px-4">
+      <section className="bg-green-50 max-w-7xl mx-auto px-4">
         <h2 className="text-3xl font-bold text-green-700 mb-10 text-center">{t("home.servicesTitle")}</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {[
@@ -87,7 +87,7 @@ const Home = () => {
       </section>
 
       {/* Expert Doctors Section */}
-      <section className="max-w-7xl mx-auto px-4">
+      <section className=" bg-green-50 max-w-7xl mx-auto px-4">
         <h2 className="text-3xl font-bold text-green-700 mb-6">{t("home.expertsTitle")}</h2>
         <div className="relative">
           <div
@@ -148,7 +148,7 @@ const Home = () => {
       <Blogs />
 
       {/* Review Section */}
-      <section className="max-w-7xl mx-auto px-4 pb-20">
+      <section className="bg-green-50 max-w-7xl mx-auto px-4 pb-20">
         <h2 className="text-3xl font-bold text-green-700 mb-6">{t("home.reviewTitle")}</h2>
         <div className="grid md:grid-cols-3 gap-6">
           {[1, 2, 3].map((i) => (
