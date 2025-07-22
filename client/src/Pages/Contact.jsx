@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 
 function Contact() {
   const [formData, setFormData] = useState({
@@ -14,12 +15,18 @@ function Contact() {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Here you'd normally send data to a server
-    console.log('Form submitted:', formData);
-    setSubmitted(true);
-    setFormData({ name: '', mobile: '', message: '' });
+
+    try {
+      const response = await axios.post('http://localhost:3000/api/contact', formData);
+      console.log('✅ Server response:', response.data);
+      setSubmitted(true);
+      setFormData({ name: '', mobile: '', message: '' });
+    } catch (error) {
+      console.error('❌ Submission error:', error);
+      alert('বার্তা পাঠাতে সমস্যা হয়েছে। পরে আবার চেষ্টা করুন।');
+    }
   };
 
   return (

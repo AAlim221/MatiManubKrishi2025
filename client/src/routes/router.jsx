@@ -29,6 +29,9 @@ import CartDetails from "../Pages/CartDetails";
 import AdminHome from "../Pages/AdminDash/AdminHome";
 import AddProduct from "../Pages/AdminDash/AddProduct";
 import Blog from "../Components/Blog";
+import AddDiseaseInfo from "../Pages/DiseaseInfoAdd";
+import TotalOrders from "../Pages/TotalOrders";
+import UserProblem from "../Pages/AdminDash/UserProblem";
 
 
 
@@ -103,6 +106,8 @@ const router = createBrowserRouter([
       { path: "addcrops", Component: AddCrops },
       { path: "addproduct", Component: AddProduct },
       { path: "diseaseInfoAdd", Component: DiseaseInfoAdd },
+      { path: "orders", Component: TotalOrders },
+      { path: "userproblem", Component: UserProblem },
     ],
   },
 ]);

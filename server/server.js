@@ -52,6 +52,10 @@ async function run() {
     const blogsinfoCollection = client
       .db("MatiManubKrishi")
       .collection("BlogInfo");
+      const userproblemCollection = client
+  .db("MatiManubKrishi")
+  .collection("UserProblems");
+
 
     // Crop POST (with image)
     app.post("/crops", upload.single("cropImage"), async (req, res) => {
@@ -141,6 +145,15 @@ async function run() {
           .send({ message: "Failed to save invoice", error: error.message });
       }
     });
+// Order GET
+app.get("/orders", async (req, res) => {
+  try {
+    const orders = await ordersCollection.find({}).toArray();
+    res.status(200).send(orders);
+  } catch (error) {
+    res.status(500).send({ message: "Error retrieving orders", error: error.message });
+  }
+});
 
     // Disease POST or check existing
     app.post("/diseases", async (req, res) => {
@@ -367,6 +380,30 @@ async function run() {
           .send({ message: "Failed to search doctors", error: error.message });
       }
     });
+   // POST - Save new contact message
+app.post('/api/contact', async (req, res) => {
+  try {
+    const formData = req.body;
+    const result = await userproblemCollection.insertOne(formData);
+    res.status(201).json({ success: true, insertedId: result.insertedId });
+  } catch (error) {
+    console.error("❌ Error saving contact:", error);
+    res.status(500).json({ success: false, message: 'Internal Server Error' });
+  }
+});
+
+// GET - Fetch all messages
+app.get('/api/contact', async (req, res) => {
+  try {
+    const messages = await userproblemCollection.find().toArray();
+    res.status(200).json(messages);
+  } catch (error) {
+    console.error("❌ Error fetching messages:", error);
+    res.status(500).json({ message: "Failed to fetch messages" });
+  }
+});
+
+
 
     await client.db("admin").command({ ping: 1 });
     console.log("MongoDB connection is healthy!");
