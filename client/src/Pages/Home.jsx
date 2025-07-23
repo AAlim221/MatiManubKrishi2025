@@ -11,7 +11,7 @@ import img3 from "../assets/BannerImg/Agriwb.png";
 import img4 from "../assets/BannerImg/Farmer_of_Bangladesh.jpg";
 import img5 from "../assets/BannerImg/food-security.jpg";
 import img6 from "../assets/BannerImg/NP_Himachal_Pradesh_68_(6348260166).jpg";
-import img7 from "../assets/BannerImg/ob_1730990551.jpg";
+import img7 from "../assets/BannerImg/Bangladesh-Agriculture.jpeg";
 import Blogs from "../Components/Blogs";
 
 const bannerImages = [img1, img2, img3, img4, img5, img6, img7];
@@ -46,7 +46,7 @@ const Home = () => {
   return (
     <div className="space-y-24">
       {/* Banner Section */}
-      <section className="w-full overflow-hidden relative">
+      <section className="w-full overflow-hidden relative ">
         <div
           ref={bannerSliderRef}
           className="flex w-full h-[400px] overflow-x-auto snap-x snap-mandatory scroll-smooth"
