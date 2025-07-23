@@ -6,7 +6,7 @@ import axios from "axios";
 
 // Local banner images
 import img1 from "../assets/BannerImg/20230410130024-photo-300X370.jpg";
-import img2 from "../assets/BannerImg/9f83b73c4b031c212537c28463eba8e9122d4fc61cf0e1f34103710a076b39b6.jpg";
+import img2 from "../assets/BannerImg/bangladesh-farmer-plows-the-soil-with-a-motorised-plow-2Y87B2W.jpg";
 import img3 from "../assets/BannerImg/Agriwb.png";
 import img4 from "../assets/BannerImg/Farmer_of_Bangladesh.jpg";
 import img5 from "../assets/BannerImg/food-security.jpg";
@@ -44,9 +44,9 @@ const Home = () => {
   }, []);
 
   return (
-    <div className="space-y-24">
-      {/* Banner Section */}
-      <section className="w-full overflow-hidden relative ">
+    <div className="space-y-30">
+  {/* Banner Section */}
+      <section className="w-full mb-3.5 overflow-hidden relative ">
         <div
           ref={bannerSliderRef}
           className="flex w-full h-[400px] overflow-x-auto snap-x snap-mandatory scroll-smooth"
@@ -54,13 +54,12 @@ const Home = () => {
           {bannerImages.map((image, i) => (
             <div key={i} className="min-w-full h-full flex-shrink-0 snap-center px-2">
               <div className="h-full bg-white rounded-t-2xl overflow-hidden">
-                <img src={image} alt={`Banner ${i + 1}`} className="w-full h-full object-cover" />
+                <img src={image} alt={`Banner ${i + 1}`} className="w-full h-full " />
               </div>
             </div>
           ))}
         </div>
       </section>
-
       {/* Services Section */}
       <section className="bg-green-50 max-w-7xl mx-auto px-4">
         <h2 className="text-3xl font-bold text-green-700 mb-10 text-center">{t("home.servicesTitle")}</h2>
