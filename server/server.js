@@ -52,9 +52,13 @@ async function run() {
     const blogsinfoCollection = client
       .db("MatiManubKrishi")
       .collection("BlogInfo");
-      const userproblemCollection = client
-  .db("MatiManubKrishi")
-  .collection("UserProblems");
+
+    const userproblemCollection = client
+      .db("MatiManubKrishi")
+      .collection("UserProblems");
+       const userCollection = client
+      .db("MatiManubKrishi")
+      .collection("Users");
 
 
     // Crop POST (with image)
@@ -402,6 +406,38 @@ app.get('/api/contact', async (req, res) => {
     res.status(500).json({ message: "Failed to fetch messages" });
   }
 });
+// server.js or routes/admin.js
+app.post("/api/admin-login", async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    const user = await userCollection.findOne({ email });
+    if (!user || user.password !== password) {
+      return res.json({ success: false, message: "Invalid credentials" });
+    }
+
+    return res.json({ success: true });
+  } catch (err) {
+    console.error("❌ Admin login error:", err);
+    return res.status(500).json({ success: false, error: err.message });
+  }
+});
+app.get("/api/check-admin/:email", async (req, res) => {
+  const email = req.params.email;
+  try {
+    const admin = await userCollection.findOne({ email, role: "admin" }); // dynamic
+    if (admin) {
+      return res.json({ isAdmin: true });
+    } else {
+      return res.json({ isAdmin: false });
+    }
+  } catch (err) {
+    console.error("❌ Admin check error:", err);
+    return res.status(500).json({ isAdmin: false, error: err.message });
+  }
+});
+
+
 
 
 

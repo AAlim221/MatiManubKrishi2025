@@ -32,6 +32,8 @@ import Blog from "../Components/Blog";
 import AddDiseaseInfo from "../Pages/DiseaseInfoAdd";
 import TotalOrders from "../Pages/TotalOrders";
 import UserProblem from "../Pages/AdminDash/UserProblem";
+import AdminLogin from "../Pages/AdminDash/AdminLogin";
+import AdminRoute from "./AdminRoute";
 
 
 
@@ -97,19 +99,28 @@ const router = createBrowserRouter([
     ],
   },
 
-  // 👨‍💼 Admin Section (separate layout, prefixed with /admin)
-  {
-    path: "/admin",
-    Component: AdminLayout,
-    children: [
-      { index: true, Component: AdminHome },
-      { path: "addcrops", Component: AddCrops },
-      { path: "addproduct", Component: AddProduct },
-      { path: "diseaseInfoAdd", Component: DiseaseInfoAdd },
-      { path: "orders", Component: TotalOrders },
-      { path: "userproblem", Component: UserProblem },
-    ],
-  },
+ {
+  path: "/admin",
+  element: (
+    <AdminRoute>
+      <AdminLayout />
+    </AdminRoute>
+  ),
+  children: [
+    { index: true, element: <AdminHome /> },
+    { path: "addcrops", element: <AddCrops /> },
+    { path: "addproduct", element: <AddProduct /> },
+    { path: "diseaseInfoAdd", element: <DiseaseInfoAdd /> },
+    { path: "orders", element: <TotalOrders /> },
+    { path: "userproblem", element: <UserProblem /> },
+  ],
+},
+// Admin login route (outside protected section)
+{
+  path: "/admin-login",
+  element: <AdminLogin />,
+}
+
 ]);
 
 export default router;

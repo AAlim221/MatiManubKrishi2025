@@ -1,10 +1,9 @@
-import React from 'react';
-import { Navigate, Outlet } from 'react-router-dom';
+import React from "react";
+import { Navigate } from "react-router-dom";
 
-function AdminRoute() {
-  const isAdmin = localStorage.getItem('role') === 'admin'; // or use AuthContext
-
-  return isAdmin ? <Outlet /> : <Navigate to="/login" />;
-}
+const AdminRoute = ({ children }) => {
+  const isAdmin = localStorage.getItem("isAdmin") === "true";
+  return isAdmin ? children : <Navigate to="/admin-login" />;
+};
 
 export default AdminRoute;

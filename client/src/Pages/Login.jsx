@@ -91,11 +91,19 @@ function Login() {
         </button>
 
         <p className="text-sm text-center text-gray-600">
-          Don't have an account?{" "}
-          <a href="/register" className="text-blue-600 hover:underline">
-            Register here
-          </a>
-        </p>
+  Don't have an account?{" "}
+  <a href="/register" className="text-blue-600 hover:underline">
+    Register here
+  </a>
+</p>
+
+<p className="text-sm text-center text-gray-600">
+  Admin?{" "}
+  <a href="/admin" className="text-green-600 hover:underline">
+    Login here
+  </a>
+</p>
+
       </div>
     </div>
   );
