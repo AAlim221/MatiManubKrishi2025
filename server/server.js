@@ -2,14 +2,21 @@ const express = require("express");
 const cors = require("cors");
 const multer = require("multer");
 const path = require("path");
-const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb"); 
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 require("dotenv").config();
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 5000;
 
 // Middleware
 app.use(cors());
+const corsOptions = {
+  origin: 'http://localhost:5173', // Allow frontend origin
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true,
+};
+app.use(cors(corsOptions));
+
 app.use(express.json());
 app.use("/uploads", express.static("uploads"));
 
@@ -56,10 +63,7 @@ async function run() {
     const userproblemCollection = client
       .db("MatiManubKrishi")
       .collection("UserProblems");
-       const userCollection = client
-      .db("MatiManubKrishi")
-      .collection("Users");
-
+    const userCollection = client.db("MatiManubKrishi").collection("Users");
 
     // Crop POST (with image)
     app.post("/crops", upload.single("cropImage"), async (req, res) => {
@@ -97,12 +101,10 @@ async function run() {
       try {
         const productData = req.body;
         const result = await productsCollection.insertOne(productData);
-        res
-          .status(201)
-          .send({
-            message: "Product added successfully",
-            productId: result.insertedId,
-          });
+        res.status(201).send({
+          message: "Product added successfully",
+          productId: result.insertedId,
+        });
       } catch (error) {
         res
           .status(500)
@@ -137,27 +139,27 @@ async function run() {
         }
 
         const result = await ordersCollection.insertOne(invoice);
-        res
-          .status(201)
-          .send({
-            message: "Invoice saved successfully",
-            orderId: result.insertedId,
-          });
+        res.status(201).send({
+          message: "Invoice saved successfully",
+          orderId: result.insertedId,
+        });
       } catch (error) {
         res
           .status(500)
           .send({ message: "Failed to save invoice", error: error.message });
       }
     });
-// Order GET
-app.get("/orders", async (req, res) => {
-  try {
-    const orders = await ordersCollection.find({}).toArray();
-    res.status(200).send(orders);
-  } catch (error) {
-    res.status(500).send({ message: "Error retrieving orders", error: error.message });
-  }
-});
+    // Order GET
+    app.get("/orders", async (req, res) => {
+      try {
+        const orders = await ordersCollection.find({}).toArray();
+        res.status(200).send(orders);
+      } catch (error) {
+        res
+          .status(500)
+          .send({ message: "Error retrieving orders", error: error.message });
+      }
+    });
 
     // Disease POST or check existing
     app.post("/diseases", async (req, res) => {
@@ -176,20 +178,16 @@ app.get("/orders", async (req, res) => {
         }
 
         const result = await diseaseInfoCollection.insertOne(diseaseData);
-        res
-          .status(201)
-          .send({
-            message: "Disease info added",
-            diseaseId: result.insertedId,
-            exists: false,
-          });
+        res.status(201).send({
+          message: "Disease info added",
+          diseaseId: result.insertedId,
+          exists: false,
+        });
       } catch (error) {
-        res
-          .status(500)
-          .send({
-            message: "Failed to process disease info",
-            error: error.message,
-          });
+        res.status(500).send({
+          message: "Failed to process disease info",
+          error: error.message,
+        });
       }
     });
 
@@ -206,12 +204,10 @@ app.get("/orders", async (req, res) => {
 
         res.status(200).send(disease);
       } catch (error) {
-        res
-          .status(500)
-          .send({
-            message: "Failed to get disease info",
-            error: error.message,
-          });
+        res.status(500).send({
+          message: "Failed to get disease info",
+          error: error.message,
+        });
       }
     });
 
@@ -250,12 +246,10 @@ app.get("/orders", async (req, res) => {
 
         res.status(200).send({ message: "Disease info updated successfully" });
       } catch (error) {
-        res
-          .status(500)
-          .send({
-            message: "Failed to update disease info",
-            error: error.message,
-          });
+        res.status(500).send({
+          message: "Failed to update disease info",
+          error: error.message,
+        });
       }
     });
 
@@ -263,7 +257,7 @@ app.get("/orders", async (req, res) => {
     app.get("/blogs", async (req, res) => {
       try {
         const blogs = await blogsinfoCollection.find({}).toArray();
-        res.status(200).send(blogs); 
+        res.status(200).send(blogs);
       } catch (error) {
         res
           .status(500)
@@ -313,12 +307,10 @@ app.get("/orders", async (req, res) => {
         if (req.file) doctorData.imageUrl = `/uploads/${req.file.filename}`;
 
         const result = await doctorsCollection.insertOne(doctorData);
-        res
-          .status(201)
-          .send({
-            message: "Doctor added successfully",
-            doctorId: result.insertedId,
-          });
+        res.status(201).send({
+          message: "Doctor added successfully",
+          doctorId: result.insertedId,
+        });
       } catch (error) {
         res
           .status(500)
@@ -384,62 +376,60 @@ app.get("/orders", async (req, res) => {
           .send({ message: "Failed to search doctors", error: error.message });
       }
     });
-   // POST - Save new contact message
-app.post('/api/contact', async (req, res) => {
-  try {
-    const formData = req.body;
-    const result = await userproblemCollection.insertOne(formData);
-    res.status(201).json({ success: true, insertedId: result.insertedId });
-  } catch (error) {
-    console.error("❌ Error saving contact:", error);
-    res.status(500).json({ success: false, message: 'Internal Server Error' });
-  }
-});
+    // POST - Save new contact message
+    app.post("/api/contact", async (req, res) => {
+      try {
+        const formData = req.body;
+        const result = await userproblemCollection.insertOne(formData);
+        res.status(201).json({ success: true, insertedId: result.insertedId });
+      } catch (error) {
+        console.error("❌ Error saving contact:", error);
+        res
+          .status(500)
+          .json({ success: false, message: "Internal Server Error" });
+      }
+    });
 
-// GET - Fetch all messages
-app.get('/api/contact', async (req, res) => {
-  try {
-    const messages = await userproblemCollection.find().toArray();
-    res.status(200).json(messages);
-  } catch (error) {
-    console.error("❌ Error fetching messages:", error);
-    res.status(500).json({ message: "Failed to fetch messages" });
-  }
-});
-// server.js or routes/admin.js
-app.post("/api/admin-login", async (req, res) => {
-  const { email, password } = req.body;
+    // GET - Fetch all messages
+    app.get("/api/contact", async (req, res) => {
+      try {
+        const messages = await userproblemCollection.find().toArray();
+        res.status(200).json(messages);
+      } catch (error) {
+        console.error("❌ Error fetching messages:", error);
+        res.status(500).json({ message: "Failed to fetch messages" });
+      }
+    });
+    // server.js or routes/admin.js
+    app.post("/api/admin-login", async (req, res) => {
+      const { email, password } = req.body;
 
-  try {
-    const user = await userCollection.findOne({ email });
-    if (!user || user.password !== password) {
-      return res.json({ success: false, message: "Invalid credentials" });
-    }
+      try {
+        const user = await userCollection.findOne({ email });
+        if (!user || user.password !== password) {
+          return res.json({ success: false, message: "Invalid credentials" });
+        }
 
-    return res.json({ success: true });
-  } catch (err) {
-    console.error("❌ Admin login error:", err);
-    return res.status(500).json({ success: false, error: err.message });
-  }
-});
-app.get("/api/check-admin/:email", async (req, res) => {
-  const email = req.params.email;
-  try {
-    const admin = await userCollection.findOne({ email, role: "admin" }); // dynamic
-    if (admin) {
-      return res.json({ isAdmin: true });
-    } else {
-      return res.json({ isAdmin: false });
-    }
-  } catch (err) {
-    console.error("❌ Admin check error:", err);
-    return res.status(500).json({ isAdmin: false, error: err.message });
-  }
-});
-
-
-
-
+        return res.json({ success: true });
+      } catch (err) {
+        console.error("❌ Admin login error:", err);
+        return res.status(500).json({ success: false, error: err.message });
+      }
+    });
+    app.get("/api/check-admin/:email", async (req, res) => {
+      const email = req.params.email;
+      try {
+        const admin = await userCollection.findOne({ email, role: "admin" }); // dynamic
+        if (admin) {
+          return res.json({ isAdmin: true });
+        } else {
+          return res.json({ isAdmin: false });
+        }
+      } catch (err) {
+        console.error("❌ Admin check error:", err);
+        return res.status(500).json({ isAdmin: false, error: err.message });
+      }
+    });
 
     await client.db("admin").command({ ping: 1 });
     console.log("MongoDB connection is healthy!");

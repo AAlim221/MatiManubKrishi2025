@@ -1,5 +1,10 @@
-import React, { useState } from 'react';
-//import axios from 'axios';
+import React, { useRef, useState } from 'react';
+import jsPDF from 'jspdf';
+import html2canvas from "html2canvas";
+import { useNavigate } from "react-router-dom";
+import { FaLeaf } from "react-icons/fa";
+
+
 
 const translations = {
   en: {
@@ -76,9 +81,13 @@ function ImageUpload() {
   const [preview, setPreview] = useState(null);
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
+   const [pdfUrl, setPdfUrl] = useState(null); 
   const [showPrescription, setShowPrescription] = useState(false);
   const [prescriptionData, setPrescriptionData] = useState(null);
   const [language, setLanguage] = useState('en'); // en or bn
+  const [showModal, setShowModal] = useState(false);
+   const printRef = useRef();
+  const navigate = useNavigate();
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -97,54 +106,35 @@ function ImageUpload() {
     }
   };
 
-  // Fetch prescription details from API
-  const fetchPrescription = async (diseaseName) => {
-    try {
-      const res = await fetch(`http://localhost:3000/diseases?diseaseName=${encodeURIComponent(diseaseName)}`);
-      if (!res.ok) {
-        const errData = await res.json();
-        throw new Error(errData.message || translations[language].errorFetching);
-      }
-      const data = await res.json();
-      setPrescriptionData(data);
-    } catch (error) {
-      console.error("Prescription fetch error:", error.message);
-      setPrescriptionData({ error: error.message });
-    }
-  };
-
+  
   const handleDetect = async () => {
-    if (!image) return;
-    setLoading(true);
-    setShowPrescription(false);
-    setPrescriptionData(null);
-    const formData = new FormData();
-    formData.append('image', image);
-    try {
-      const res = await fetch('http://localhost:5000/predict', {
-        method: 'POST',
-        body: formData,
-      });
-      const data = await res.json();
-      if (res.ok) {
-        setResult(data);
-        if (data.prediction) {
-          await fetchPrescription(data.prediction);
-        }
-      } else {
-        setResult({
-          error: data.error,
-          confidence: null,
-          prediction: null,
-        });
-      }
-    } catch (error) {
-      setResult(` Server error: ${error.message}`);
-    } finally {
-      setLoading(false);
-    }
-  };
+  setLoading(true);
+  const formData = new FormData();
+  formData.append('image', image);
 
+  try {
+    const res = await fetch('http://localhost:5050/predict', {
+      method: 'POST',
+      body: formData
+    });
+    const data = await res.json();
+    if (res.ok) {
+      setResult(data);
+      setPrescriptionData({
+      suggestedPesticide: data.suggestedPesticide,
+      treatment: data.treatment,
+      plantCareAdvice: data.plantCareAdvice
+    });
+
+    } else {
+      setResult({ error: data.error });
+    }
+  } catch (err) {
+    setResult({ error: err.message });
+  } finally {
+    setLoading(false);
+  }
+};
   // Simple manual translation for prescription fields (only if backend sends only English)
   const translatePrescription = (data) => {
     if (!data) return null;
@@ -310,7 +300,6 @@ function ImageUpload() {
               "পর্যাপ্ত পানি ও পুষ্টি সরবরাহ নিশ্চিত করুন।"
           };
 
-
       return {
         suggestedPesticide: dict[data.suggestedPesticide ] || data.suggestedPesticide ,
         treatment: dict[data.treatment ] || data.treatment ,
@@ -322,98 +311,338 @@ function ImageUpload() {
 
   const displayedPrescription = translatePrescription(prescriptionData);
 
+const generatePDF = () => {
+  console.log('printRef.current:', printRef.current);
+  if (!displayedPrescription) return;
+
+  // Clean up old blob URL if exists to avoid memory leaks
+  if (pdfUrl) {
+    URL.revokeObjectURL(pdfUrl);
+    setPdfUrl(null);
+  }
+
+
+  if (language === "bn") {
+    if (!printRef.current) {
+      alert("Bangla content not ready for PDF.");
+      console.error("printRef.current is null");
+      return;
+    }
+      const printElement = printRef.current;
+
+    // Temporarily force background and text color for canvas rendering
+    const originalBackground = printElement.style.backgroundColor;
+    const originalColor = printElement.style.color;
+
+    printElement.style.backgroundColor = "#ffffff";
+    printElement.style.color = "#000000";
+
+    html2canvas(printElement, {
+      scale: 2,
+      useCORS: true,
+      backgroundColor: "#ffffff",
+      allowTaint: true,
+      logging: true,
+    }).then((canvas) => {
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF({
+        orientation: "portrait",
+        unit: "pt",
+        format: "a4",
+      });
+
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+      const margin = 20;
+
+      pdf.addImage(imgData, "PNG", margin, margin, pdfWidth - 2 * margin, pdfHeight);
+        const pdfBlob = pdf.output("blob");
+        const url = URL.createObjectURL(pdfBlob);
+        setPdfUrl(url); //  for preview
+        setShowModal(true); //  open modal
+        pdf.save("plant_disease_prescription_bn.pdf");
+        printElement.style.backgroundColor = originalBackground;
+        printElement.style.color = originalColor;
+
+
+    }).catch((err) => {
+      console.error("PDF Generation Error in Bangla mode:", err);
+      alert("Failed to generate Bangla PDF. Please try again.");
+    });
+
+  }else {
+    try {
+      const doc = new jsPDF();
+      doc.setFont("helvetica");
+      doc.setFontSize(16);
+      doc.text(translations[language].generatePrescription, 10, 20);
+      doc.setFontSize(12);
+      const lineHeight = 10;
+      let y = 40;
+      const maxWidth = 180; // you can adjust width as needed
+
+      // Suggested Pesticide
+      const pesticideText = `${translations[language].suggestedPesticide}: ${displayedPrescription.suggestedPesticide || "-"}`;
+      const pesticideLines = doc.splitTextToSize(pesticideText, maxWidth);
+      pesticideLines.forEach(line => {
+        doc.text(line, 10, y);
+        y += lineHeight;
+      });
+      y += lineHeight; // extra spacing after block
+
+      // Treatment
+      const treatmentText = `${translations[language].treatment}: ${displayedPrescription.treatment || "-"}`;
+      const treatmentLines = doc.splitTextToSize(treatmentText, maxWidth);
+      treatmentLines.forEach(line => {
+        doc.text(line, 10, y);
+        y += lineHeight;
+      });
+      y += lineHeight;
+
+      // Plant Care Advice
+      const adviceText = `${translations[language].plantCareAdvice}: ${displayedPrescription.plantCareAdvice || "-"}`;
+      const adviceLines = doc.splitTextToSize(adviceText, maxWidth);
+      adviceLines.forEach(line => {
+        doc.text(line, 10, y);
+        y += lineHeight;
+      });
+      y += lineHeight;
+
+     
+      // Create blob & URL for preview
+      const pdfBlob = doc.output("blob");
+      const url = URL.createObjectURL(pdfBlob);
+      setPdfUrl(url);
+      setShowModal(true);
+
+      doc.save("plant_disease_prescription.pdf");
+    } catch (error) {
+      console.error("English PDF Generation Error:", error);
+      alert("Failed to generate English PDF.");
+    }
+  }
+};
+
+
   function convertToBanglaDigits(number) {
   const banglaDigits = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
   return number.toString().split('').map(d => (d === '.' ? '.' : banglaDigits[d])).join('');
 }
-
   return (
-    <div className="w-full max-w-md mx-auto p-4">
-      {/* Language selector */}
-      <div className="mb-4 flex justify-end">
-        <select
-          value={language}
-          onChange={(e) => setLanguage(e.target.value)}
-          className="border rounded p-1"
-        >
-          <option value="en">English</option>
-          <option value="bn">বাংলা</option>
-        </select>
-      </div>
+    <div className="relative min-h-screen w-full flex items-center justify-center px-4 overflow-hidden">
 
-      <label className="block text-lg font-medium text-gray-700 mb-2">
-        {translations[language].uploadLabel}
-      </label>
+    {/* Fullscreen video background */}
+  <div className="fixed inset-0 z-0 overflow-hidden">
+    <video
+      autoPlay
+      loop
+      muted
+      playsInline
+      className="w-full h-full object-cover"
+      style={{ filter: 'blur(4px) brightness(0.75)' }}
+    >
+      <source src="https://cdn.pixabay.com/video/2016/11/13/6338-191338827_large.mp4" type="video/mp4" />
+      Your browser does not support the video tag.
+    </video>
+  </div>
 
-      <input
-        type="file"
-        accept="image/*"
-        onChange={handleImageChange}
-        className="block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-6
-                   file:rounded-full file:border-0
-                   file:bg-green-100 file:text-green-700
-                   hover:file:bg-green-200 transition mb-6"
-      />
+    {/* Main content container */}
+  <div className="relative w-full max-w-6xl h-[2000px] mx-auto rounded-3xl p-10 shadow-2xl backdrop-blur-md bg-white/80 z-10 overflow-y-auto overflow-x-hidden">
 
-      {preview && (
-        <div className="flex flex-col items-center">
-          <img
-            src={preview}
-            alt="Preview"
-            className="w-full max-w-sm rounded-xl shadow-lg mb-4 ring-1 ring-gray-300"
-          />
-          <button
-            onClick={handleDetect}
-            className="bg-green-600 text-white text-base font-medium px-6 py-2 rounded-full hover:bg-green-700 shadow-md transition"
-            disabled={loading}
+
+
+        {/* Language Selector */}
+        <div className="flex justify-end mb-4">
+          <select
+            value={language}
+            onChange={(e) => setLanguage(e.target.value)}
+            className="border border-gray-300 rounded-md px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500"
           >
-            {loading ? translations[language].detectingButton : translations[language].detectButton}
-          </button>
+            <option value="en">English</option>
+            <option value="bn">বাংলা</option>
+          </select>
+        </div>
 
-           {/* Prediction result and confidence */}
-          {result && !result.error && (
-            <div className="mt-4 text-center">
-              <p>
-                <strong>{translations[language].prediction}:</strong>{" "}
-                <span className="text-black"> 
-                {language === "bn"? translations.bn.diseaseDict[result.prediction] || result.prediction : result.prediction}</span>
-              </p>
+        {/* Upload Label */}
+        <label className="block text-3xl font-extrabold text-green-900 mb-6 tracking-wide flex items-center gap-3 select-none
+          drop-shadow-md
+          bg-gradient-to-r from-green-900 to-green-200 bg-clip-text
+          ">
+          {translations[language].uploadLabel}
+          <FaLeaf className="text-green-900 text-2xl animate-pulse" />
+        </label>
 
-              {result?.confidence !== undefined && result?.confidence !== null && (
-                <p>
-                  <strong>{translations[language].confidence}:</strong>{" "}
-                  <span className="text-black"> {language === "bn"
-                  ? convertToBanglaDigits(result.confidence.toFixed(2))
-                  : result.confidence.toFixed(2)}%</span>
+        {/* File Input */}
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handleImageChange}
+          className="w-full text-gray-700 file:mr-4 file:py-2 file:px-6 file:rounded-full file:border-0 file:bg-green-800 file:text-green-200 hover:file:bg-green-700 transition mb-6"
+        />
+
+        {/* Preview & Detection */}
+        {preview && (
+          <div className="flex flex-col items-center space-y-6  w-full max-w-full">
+            <img
+              src={preview}
+              alt="Preview"
+              className="w-full max-w-sm rounded-xl shadow-lg border border-gray-200 max-w-full object-contain"
+            />
+
+            <button
+              onClick={handleDetect}
+              className="w-full bg-green-600 text-white font-semibold py-3 rounded-xl hover:bg-green-700 shadow-md transition disabled:bg-green-400"
+              disabled={loading}
+            >
+              {loading
+                ? translations[language].detectingButton
+                : translations[language].detectButton}
+            </button>
+
+            {/* Result Display */}
+            {result && !result.error && (
+              <div className="w-full bg-gray-50 rounded-xl p-6 shadow-inner border border-gray-200 text-center min-h-[1200px]">
+                <p className="text-lg font-semibold text-gray-900">
+                  {translations[language].prediction}:
+                </p>
+                <p className="text-2xl text-green-700 font-bold mb-2">
+                  {language === "bn"
+                    ? translations.bn.diseaseDict[result.prediction] || result.prediction
+                    : result.prediction}
+                </p>
+
+                {result?.confidence !== undefined && (
+                  <p className="text-gray-700 mb-4">
+                    {translations[language].confidence}:{" "}
+                    <span className="font-medium text-black">
+                      {language === "bn"
+                        ? convertToBanglaDigits(result.confidence.toFixed(2))
+                        : result.confidence.toFixed(2)}
+                      %
+                    </span>
+                  </p>
+                )}
+
+                {/* Prescription Button */}
+                {!showPrescription && prescriptionData && !prescriptionData.error && (
+                  <button
+                    onClick={() => setShowPrescription(true)}
+                    className="mt-3 bg-green-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-green-700 transition"
+                  >
+                    {translations[language].generatePrescription}
+                  </button>
+                )}
+
+              {/* Prescription Display */}
+                {showPrescription && (
+                  <>
+                    <div
+                      ref={printRef}
+                      style={{
+                        backgroundColor: "white",
+                        padding: "1.5rem",
+                        borderRadius: "0.75rem",
+                        boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
+                        fontFamily:
+                          language === "bn"
+                            ? "'Noto Sans Bengali', sans-serif"
+                            : "Arial, sans-serif",
+                        color: "#111",
+                        marginTop: "1.5rem",
+                        minHeight: "400px", 
+                      }}
+                    >
+                      <h3
+                        style={{
+                          fontWeight: "700",
+                          color: "#15803d",
+                          fontSize: "2rem",
+                           margin: "2rem 0 2rem",
+                        }}
+                      >
+                        {translations[language].suggestedTreatment}
+                      </h3>
+                      <p style={{ fontSize: "1.25rem", marginBottom: "0.5rem"}}>
+                       <strong>{translations[language].suggestedPesticide}:</strong>{" "}
+                       {displayedPrescription.suggestedPesticide}
+                      </p>
+                      <p style={{  fontSize: "1.25rem",marginBottom: "0.5rem" }}>
+                        <strong>{translations[language].treatment}:</strong>{" "}
+                        {displayedPrescription.treatment}
+                      </p>
+                      <p style={{ fontSize: "1.25rem" }}>
+                        <strong>{translations[language].plantCareAdvice}:</strong>{" "}
+                        {displayedPrescription.plantCareAdvice}
+                      </p>
+                    </div>
+
+                    <div className="mt-6 text-center">
+                      <button
+                        onClick={generatePDF}
+                        style={{
+                          backgroundColor: "#15803d",
+                          color: "white",
+                          padding: "0.75rem 2rem",
+                          borderRadius: "0.75rem",
+                          fontWeight: "600",
+                          marginTop: "1rem",
+                          cursor: "pointer",
+                        }}
+                      >
+                        {language === "bn"
+                          ? "পিডিএফ ডাউনলোড করুন"
+                          : "Generate PDF"}
+                      </button>
+                    </div>
+                  </>
+                )}
+
+              {/* Error Message */}
+              {prescriptionData?.error && (
+                <p className="mt-6 text-red-600 font-semibold">
+                  {prescriptionData.error}
                 </p>
               )}
 
-               {/* Prescription generate */}
-              {!showPrescription && prescriptionData && !prescriptionData.error && (
-                <button
-                  onClick={() => setShowPrescription(true)}
-                  className="mt-4 bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition"
-                >
-                  {translations[language].generatePrescription}
-                </button>
-              )}
+              {/* PDF Modal */}
+                {showModal && pdfUrl && (
+                  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-3xl">
+                    <div className="bg-white w-[50vw] h-[80vh] rounded-3xl shadow-2xl p-8 relative flex flex-col border border-gray-200">
+                      <div className="flex justify-between items-center mb-4">
+                        <h2 className="text-2xl font-bold text-gray-800">📄 PDF Preview</h2>
+                        <button
+                          onClick={() => setShowModal(false)}
+                          className="text-red-500 hover:text-red-700 text-3xl leading-none"
+                        >
+                          &times;
+                        </button>
+                      </div>
 
-              {showPrescription && prescriptionData && !prescriptionData.error && (
-                <div className="bg-gray-100 p-4 mt-4 rounded-md shadow text-left max-w-md mx-auto">
-                  <h3 className="font-semibold text-green-700 mb-2">{translations[language].suggestedTreatment}</h3>
-                  <p><strong>{translations[language].suggestedPesticide}:</strong> {displayedPrescription.suggestedPesticide}</p>
-                  <p><strong>{translations[language].treatment}:</strong> {displayedPrescription.treatment}</p>
-                  <p><strong>{translations[language].plantCareAdvice}:</strong> {displayedPrescription.plantCareAdvice}</p>
-                </div>
-              )}
+                      <iframe
+                        src={pdfUrl}
+                        title="PDF Preview"
+                        className="flex-1 w-full rounded-lg border"
+                      />
 
-              {prescriptionData?.error && (
-                <p className="text-red-600 mt-4">{prescriptionData.error}</p>
-              )}
-            </div>
-          )}
-        </div>
-      )}
+                      <div className="mt-6 flex justify-end">
+                        <button
+                          onClick={() => {
+                            setShowModal(false);
+                            navigate("/market");
+                          }}
+                          className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-6 py-3 rounded-lg shadow-md transition"
+                        >
+                          🛍 Go to Market
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
