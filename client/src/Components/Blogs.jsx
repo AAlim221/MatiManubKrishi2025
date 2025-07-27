@@ -51,14 +51,16 @@ const Blogs = () => {
                 className="min-w-[250px] bg-white rounded-xl overflow-hidden shadow hover:shadow-xl transition-transform transform hover:-translate-y-1 duration-300"
               >
                 <img
-                  src={
-                    blog.imageUrl
-                      ? `http://localhost:3000${blog.imageUrl}`
-                      : `https://source.unsplash.com/400x250/?plant,farmer,${blog._id}`
-                  }
-                  alt={blog.title || "Blog image"}
-                  className="w-full h-48 object-cover"
-                />
+  src={
+    blog.imageUrl?.startsWith("http")
+      ? blog.imageUrl
+      : `http://localhost:3000${blog.imageUrl}`
+  }
+  alt={blog.title || "Blog image"}
+  className="w-full h-48 object-cover"
+/>
+
+                
                 <div className="p-4">
                   <h3 className="text-lg font-bold text-green-800 text-center">
                     {blog.title || "Untitled Blog"}

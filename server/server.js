@@ -64,6 +64,12 @@ async function run() {
       .db("MatiManubKrishi")
       .collection("UserProblems");
     const userCollection = client.db("MatiManubKrishi").collection("Users");
+    const commonDiseaseCollection = client
+  .db("MatiManubKrishi")
+  .collection("CommonDisease");
+  const reviewsCollection = client.db("MatiManubKrishi").collection("Reviews");
+
+
 
     // Crop POST (with image)
     app.post("/crops", upload.single("cropImage"), async (req, res) => {
@@ -430,6 +436,31 @@ async function run() {
         return res.status(500).json({ isAdmin: false, error: err.message });
       }
     });
+    //common disease part
+    // GET all common diseases
+app.get("/common-diseases", async (req, res) => {
+  try {
+    const diseases = await commonDiseaseCollection.find({}).toArray();
+    res.status(200).json(diseases);
+  } catch (error) {
+    res.status(500).json({
+      message: "Failed to fetch common diseases",
+      error: error.message,
+    });
+  }
+});
+// GET all reviews
+app.get("/reviews", async (req, res) => {
+  try {
+    const reviews = await reviewsCollection.find({}).toArray();
+    res.status(200).json(reviews);
+  } catch (error) {
+    res.status(500).json({
+      message: "Failed to fetch reviews",
+      error: error.message,
+    });
+  }
+});
 
     await client.db("admin").command({ ping: 1 });
     console.log("MongoDB connection is healthy!");
@@ -437,6 +468,8 @@ async function run() {
     console.error("MongoDB connection error:", error.message);
   }
 }
+
+
 
 process.on("SIGINT", async () => {
   await client.close();

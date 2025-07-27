@@ -88,6 +88,9 @@ function ImageUpload() {
   const [showModal, setShowModal] = useState(false);
    const printRef = useRef();
   const navigate = useNavigate();
+  const [pdfBase64ForMarket, setPdfBase64ForMarket] = useState(null);
+
+
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -135,6 +138,7 @@ function ImageUpload() {
     setLoading(false);
   }
 };
+
   // Simple manual translation for prescription fields (only if backend sends only English)
   const translatePrescription = (data) => {
     if (!data) return null;
@@ -357,6 +361,13 @@ const generatePDF = () => {
 
       pdf.addImage(imgData, "PNG", margin, margin, pdfWidth - 2 * margin, pdfHeight);
         const pdfBlob = pdf.output("blob");
+         // Convert blob to base64 for Market page
+  const reader = new FileReader();
+  reader.onloadend = () => {
+    const base64data = reader.result.split(",")[1];
+    setPdfBase64ForMarket(base64data);
+  };
+  reader.readAsDataURL(pdfBlob);
         const url = URL.createObjectURL(pdfBlob);
         setPdfUrl(url); //  for preview
         setShowModal(true); //  open modal
@@ -375,7 +386,7 @@ const generatePDF = () => {
       const doc = new jsPDF();
       doc.setFont("helvetica");
       doc.setFontSize(16);
-      doc.text(translations[language].generatePrescription, 10, 20);
+      doc.text(translations[language].suggestedTreatment, 10, 20);
       doc.setFontSize(12);
       const lineHeight = 10;
       let y = 40;
@@ -411,11 +422,20 @@ const generatePDF = () => {
      
       // Create blob & URL for preview
       const pdfBlob = doc.output("blob");
-      const url = URL.createObjectURL(pdfBlob);
-      setPdfUrl(url);
-      setShowModal(true);
+const url = URL.createObjectURL(pdfBlob);
+setPdfUrl(url);
 
-      doc.save("plant_disease_prescription.pdf");
+// generate base64 string to pass to Market
+const pdfBase64 = doc.output("datauristring").split(",")[1];
+
+setShowModal(true);
+
+// save if needed
+doc.save("plant_disease_prescription.pdf");
+
+// store in state so you can use it in the button click
+setPdfBase64ForMarket(pdfBase64);
+
     } catch (error) {
       console.error("English PDF Generation Error:", error);
       alert("Failed to generate English PDF.");
@@ -628,7 +648,12 @@ const generatePDF = () => {
                         <button
                           onClick={() => {
                             setShowModal(false);
-                            navigate("/market");
+                            navigate("/market", {
+                            state: {
+                              pdfBase64: pdfBase64ForMarket,
+                              language: language,
+                            },
+                          });
                           }}
                           className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-6 py-3 rounded-lg shadow-md transition"
                         >
