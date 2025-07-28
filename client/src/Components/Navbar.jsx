@@ -111,7 +111,7 @@ const Navbar = () => {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-green-100 dark:bg-green-900 shadow-md border-b border-green-300 dark:border-green-700 transition-colors">
+    <header className="sticky top-0 z-50 w-full bg-[#c7ddc9] dark:green-200 shadow-md border-b border-green-300 dark:border-green-700 transition-colors">
       <nav className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
      
         <div className="flex items-center gap-6">
@@ -120,7 +120,7 @@ const Navbar = () => {
             <Link to="/">{t("brandName", "🌿 KrishiApp")}</Link>
           </h1> */}
 
-          <ul className="hidden md:flex gap-6 text-green-800 dark:text-green-200 font-medium">
+          <ul className="hidden md:flex gap-6 text-green-900 dark:text-green-900 font-medium">
             <li><Link to="/" className="hover:text-green-500 transition-colors duration-200">{t("nav.home")}</Link></li>
             <li><Link to="/market" className="hover:text-green-500 transition-colors duration-200">{t("nav.market")}</Link></li>
             <li><Link to="/seasonalcrops" className="hover:text-green-500 transition-colors duration-200">{t("nav.seasonalcrops")}</Link></li>
