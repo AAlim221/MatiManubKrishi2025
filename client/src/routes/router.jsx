@@ -34,6 +34,8 @@ import TotalOrders from "../Pages/TotalOrders";
 import UserProblem from "../Pages/AdminDash/UserProblem";
 import AdminLogin from "../Pages/AdminDash/AdminLogin";
 import AdminRoute from "./AdminRoute";
+import AllOrders from "../Pages/AllOrders";
+import About from "../Pages/About";
 
 
 
@@ -61,6 +63,8 @@ const router = createBrowserRouter([
       { path: "winter", Component: WinterPage },
       { path: "spring", Component: SpringPage },
       { path: "/doctor/:id", Component: DoctorDetails },
+      { path: "/allorders", Component: AllOrders },
+      { path: "/about", Component: About },
 
       // 🔒 Protected User Routes
       {

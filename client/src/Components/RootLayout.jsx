@@ -9,8 +9,8 @@ const RootLayout = () => {
       {/* Navigation */}
       <NavBar />
 
-      {/* Main Content */}
-      <main className="flex-grow max-w-7xl w-full mx-auto px-4 md:px-6 py-6">
+     {/* Main Content */}
+      <main className="flex-grow w-full">
         <Outlet />
       </main>
 

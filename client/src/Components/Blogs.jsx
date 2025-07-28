@@ -5,6 +5,7 @@ const Blogs = () => {
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [showAll, setShowAll] = useState(false); // ✅ control visibility
 
   useEffect(() => {
     const fetchBlogs = async () => {
@@ -29,46 +30,64 @@ const Blogs = () => {
     fetchBlogs();
   }, []);
 
+  const visibleBlogs = showAll ? blogs : blogs.slice(0, 6); // ✅ show 6 or all
+
   return (
     <section className="bg-green-50 py-16">
       <div className="max-w-7xl mx-auto px-4">
-        <h2 className="text-3xl font-bold text-green-700 mb-10 text-center">
+        <h2 className="text-4xl font-extrabold text-center bg-gradient-to-r from-green-800 to-lime-600 text-transparent bg-clip-text drop-shadow-lg mb-16 animate-fade-in-up">
           Our Latest Blogs
         </h2>
 
         {loading ? (
-          <p className="text-center text-gray-500">Loading blogs...</p>
+          <p className="text-center text-gray-500 text-lg">Loading blogs...</p>
         ) : error ? (
-          <p className="text-center text-red-500">{error}</p>
+          <p className="text-center text-red-500 text-lg">{error}</p>
         ) : blogs.length === 0 ? (
-          <p className="text-center text-gray-500">No blogs found.</p>
+          <p className="text-center text-gray-500 text-lg">No blogs found.</p>
         ) : (
-          <div className="flex overflow-x-auto gap-6 pb-4 scrollbar-thin scrollbar-thumb-green-500 scrollbar-track-gray-200">
-            {blogs.map((blog) => (
-              <Link
-                to={`/blog/${blog._id}`}
-                key={blog._id}
-                className="min-w-[250px] bg-white rounded-xl overflow-hidden shadow hover:shadow-xl transition-transform transform hover:-translate-y-1 duration-300"
-              >
-                <img
-  src={
-    blog.imageUrl?.startsWith("http")
-      ? blog.imageUrl
-      : `http://localhost:3000${blog.imageUrl}`
-  }
-  alt={blog.title || "Blog image"}
-  className="w-full h-48 object-cover"
-/>
+          <>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+              {visibleBlogs.map((blog) => (
+                <Link
+                  to={`/blog/${blog._id}`}
+                  key={blog._id}
+                  className="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden group"
+                >
+                  <div className="w-full h-64 overflow-hidden">
+                    <img
+                      src={
+                        blog.imageUrl?.startsWith("http")
+                          ? blog.imageUrl
+                          : `http://localhost:3000${blog.imageUrl}`
+                      }
+                      alt={blog.title || "Blog image"}
+                      className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-300"
+                    />
+                  </div>
+                  <div className="p-5 text-center">
+                    <h3 className="text-xl font-semibold text-green-800 mb-2">
+                      {blog.title || "Untitled Blog"}
+                    </h3>
+                    <p className="text-sm text-gray-600 line-clamp-3">
+                      {blog.excerpt || "Click to read more..."}
+                    </p>
+                  </div>
+                </Link>
+              ))}
+            </div>
 
-                
-                <div className="p-4">
-                  <h3 className="text-lg font-bold text-green-800 text-center">
-                    {blog.title || "Untitled Blog"}
-                  </h3>
-                </div>
-              </Link>
-            ))}
-          </div>
+            {!showAll && blogs.length > 6 && (
+              <div className="text-center mt-10">
+                <button
+                  onClick={() => setShowAll(true)}
+                  className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-6 rounded-full transition duration-300"
+                >
+                  See More
+                </button>
+              </div>
+            )}
+          </>
         )}
       </div>
     </section>

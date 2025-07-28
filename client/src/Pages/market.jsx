@@ -6,7 +6,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 // categories
 const categories = [
-  "All",
+  "Filter",
   "Machinery",
   "Fertilizer",
   "Seeds",
@@ -327,7 +327,7 @@ const Market = () => {
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           placeholder="🔍 Search product..."
-          className="border px-4 py-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 w-full sm:w-64"
+          className="border px-4 py-2 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-400 w-full sm:w-64"
         />
 
         {/* Prescription Button */}
@@ -346,7 +346,7 @@ const Market = () => {
       {/* Category Filter & Product Grid Wrapper */}
       <div
         className="transition-all duration-300"
-        style={{ marginRight: isSidebarOpen ? "200px" : "0px" }}
+        style={{ marginRight: isSidebarOpen ? "300px" : "0px" }}
       >
         {/* Product Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">

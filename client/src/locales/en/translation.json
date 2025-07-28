@@ -5,70 +5,95 @@
     "soil": "Soil",
     "seasonalcrops": "Seasonal Crops",
     "services": "Services",
-    "plantdiseaseDetect": "Plant Disease Detection ",
-     "diseaseInfoAdd": "Add Disease Info",
+    "diseaseDetect": "Disease Detection",
+    "diseaseInfoAdd": "Add Disease Info",
     "contact": "Contact",
-    "market": "Market"
+    "market": "Market",
+    "about": "About"
   },
   "auth": {
     "login": "Login",
-    "register": "Register"
+    "register": "Register",
+    "logout": "Logout"
   },
   "home": {
     "servicesTitle": "Our Services",
     "services": {
       "disease": "Plant Disease Detection",
       "fertilizer": "Fertilizer Suggestion",
-      "seasonal": "Seasonal Crops Suggestion",
-      "weather": "Weather Alert",
-      "soilWise": "Soil wise Crops Suggestion"
+      "seasonal": "Seasonal Crop Suggestion",
+      "weather": "Weather Alerts",
+      "soilWise": "Soil-Based Crop Advice"
     },
     "blogTitle": "From Our Blog",
-    "expertsTitle": "Plant Experts",
+    "expertsTitle": "Agricultural Experts",
     "diseaseTitle": "Common Plant Diseases",
-    "reviewTitle": "Farmer Reviews",
-    "reviewMessage": "Thanks to this platform, I detected issues early and saved my crops!"
-  }
-  ,
-  
+    "reviewTitle": "Farmer Feedback",
+    "reviewMessage": "Thanks to this platform, I detected problems early and saved my crops!"
+  },
+  "servicesPage": {
+    "title": "🌱 AI Agricultural Assistance Services",
+    "description": "Our AI system is built for Bangladeshi farmers to solve every problem with one click. From crop selection to expert advice – all in one place.",
+    "disclaimer": "⚙️ These services are continuously improved with support from AI and agricultural experts. Contact us for free consultations.",
+    "aiServices": [
+      {
+        "title": "🦠 Disease & Problem Solver",
+        "description": "Upload a photo of a leaf or root to identify the disease and get a quick solution."
+      },
+      {
+        "title": "🌾 Full Crop Information",
+        "description": "Provides information about crop varieties, land preparation, fertilizers, irrigation, and yield."
+      },
+      {
+        "title": "🧠 Enter Soil Data & Get Advice",
+        "description": "Compare multiple crops or techniques to get recommendations."
+      },
+      {
+        "title": "🧪 Soil & Water Analysis (Coming Soon)",
+        "description": "Analyze soil and water quality using AI tools to select suitable crops."
+      },
+      {
+        "title": "👨‍⚕️ Agri Doctor Advice",
+        "description": "Receive direct guidance and advice from agricultural experts."
+      }
+    ]
+  },
   "seasonData": {
     "summer": {
-      "name": "(Summer)",
+      "name": "Summer (Boishakh - Joishtho)",
       "months": "Boishakh - Joishtho (April - May)",
-      "weather": "Hot, Dry",
-      "crops": ["Aus Rice", "Jute", "Fruits (Mango, Jackfruit)", "Vegetables (Pumpkin, Gourd)"]
+      "weather": "Hot and Dry",
+      "crops": ["Aus Rice", "Jute", "Fruits (Mango, Jackfruit)", "Vegetables (Gourd, Pumpkin)"]
     },
     "rainy": {
-      "name": "(Rainy)",
+      "name": "Rainy (Ashar - Srabon)",
       "months": "Ashar - Srabon (June - July)",
       "weather": "Heavy Rainfall",
-      "crops": ["Aman Rice (seedling stage)", "Vegetables", "Jute (harvest time)"]
+      "crops": ["Aman Rice (seedling)", "Vegetables", "Jute (harvest period)"]
     },
     "autumn": {
-      "name": "(Autumn)",
+      "name": "Autumn (Bhadro - Ashwin)",
       "months": "Bhadro - Ashwin (August - September)",
-      "weather": "Clear sky after rain",
+      "weather": "Clear skies after rain",
       "crops": ["Aman Rice (growing)", "Spinach", "Radish"]
     },
     "lateAutumn": {
-      "name": "(Late Autumn)",
+      "name": "Late Autumn (Kartik - Ogrohayon)",
       "months": "Kartik - Ogrohayon (October - November)",
-      "weather": "Cool, Dry",
+      "weather": "Cool and Dry",
       "crops": ["Aman Rice (harvest)", "Lentils", "Mustard", "Onion"]
     },
     "winter": {
-      "name": "(Winter)",
+      "name": "Winter (Poush - Magh)",
       "months": "Poush - Magh (December - January)",
       "weather": "Cold",
       "crops": ["Vegetables (Cabbage, Cauliflower, Tomato)", "Wheat", "Potato", "Mustard"]
     },
     "spring": {
-      "name": "Boshonto (Spring)",
+      "name": "Spring (Falgun - Chaitro)",
       "months": "Falgun - Chaitro (February - March)",
-      "weather": "Pleasant, Colorful",
+      "weather": "Pleasant and Colorful",
       "crops": ["Boro Rice (seedling/growth)", "Flowers", "Tomato", "Cucumber"]
     }
   }
-
-
 }

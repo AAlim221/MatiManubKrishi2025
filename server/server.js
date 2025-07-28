@@ -166,6 +166,28 @@ async function run() {
           .send({ message: "Error retrieving orders", error: error.message });
       }
     });
+app.get("/orders", async (req, res) => {
+  const { email, startDate, endDate } = req.query;
+  let filter = {};
+
+  if (email) filter.userEmail = email;
+
+  if (startDate && endDate) {
+    filter.createdAt = {
+      $gte: new Date(startDate),
+      $lte: new Date(endDate),
+    };
+  }
+
+  try {
+    const orders = await ordersCollection.find(filter).toArray();
+    res.status(200).send(orders);
+  } catch (error) {
+    res.status(500).send({ message: "Error", error: error.message });
+  }
+});
+
+
 
     // Disease POST or check existing
     app.post("/diseases", async (req, res) => {
