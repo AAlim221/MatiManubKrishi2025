@@ -1,19 +1,30 @@
 import { createBrowserRouter } from "react-router-dom";
+//Layout
+
 import RootLayout from "../Components/RootLayout";
 import AdminLayout from "../Components/AdminLayout";
+//Home Page
 
-import Home from "../Pages/Home";
+
 import Mati from "../Pages/Soil";
-import Login from "../Pages/Login";
-import Register from "../Pages/Register";
+import DoctorDetails from "../Pages/DoctorDetails";
+import CommonDiseaseDetails from "../Components/CommonDiseaseDetails";
+import Blog from "../Components/Blog";
+import Blogs from "../Components/Blogs";
+
+//Nabvar
+import Home from "../Pages/Home";
+import Market from "../Pages/Market";
+import SeasonalCrops from "../Pages/SeasonalCrops";
+import PlantDetect from "../Pages/PlantDetect";
 import Services from "../Pages/Services";
 import Contact from "../Pages/Contact";
+import About from "../Pages/About";
+import Login from "../Pages/Login";
+import Register from "../Pages/Register";
+//Services
 import AllCrops from "../Pages/AllCrops";
 import CropDetails from "../Pages/CropDetails";
-import SeasonalCrops from "../Pages/SeasonalCrops";
-import Market from "../Pages/Market";
-import PlantDetect from "../Pages/PlantDetect";
-import DiseaseInfoAdd from "../Pages/DiseaseInfoAdd";
 import SoilAdvisor from "../Pages/SoilAdvisor";
 import SummerPage from "../Pages/SummerPage";
 import RainyPage from "../Pages/RainyPage";
@@ -21,21 +32,22 @@ import AutumnPage from "../Pages/AutumnPage";
 import LateAutumnPage from "../Pages/LateAutumnPage";
 import WinterPage from "../Pages/WinterPAge";
 import SpringPage from "../Pages/SpringPage";
-import DoctorDetails from "../Pages/DoctorDetails";
-import AddCrops from "../Pages/AdminDash/AddCrops";
-import Blogs from "../Components/Blogs";
+import CartDetails from "../Pages/CartDetails"
 import ProtectedRoute from "../routes/ProtectedRoute";
-import CartDetails from "../Pages/CartDetails";
+
+//admin
 import AdminHome from "../Pages/AdminDash/AdminHome";
+import AdminLogin from "../Pages/AdminDash/AdminLogin";
+import AddCrops from "../Pages/AdminDash/AddCrops";
 import AddProduct from "../Pages/AdminDash/AddProduct";
-import Blog from "../Components/Blog";
-import AddDiseaseInfo from "../Pages/DiseaseInfoAdd";
+import DiseaseInfoAdd from "../Pages/DiseaseInfoAdd";
 import TotalOrders from "../Pages/TotalOrders";
 import UserProblem from "../Pages/AdminDash/UserProblem";
-import AdminLogin from "../Pages/AdminDash/AdminLogin";
-import AdminRoute from "./AdminRoute";
 import AllOrders from "../Pages/AllOrders";
-import About from "../Pages/About";
+import AdminRoute from "./AdminRoute";
+
+
+
 
 
 
@@ -65,13 +77,15 @@ const router = createBrowserRouter([
       { path: "/doctor/:id", Component: DoctorDetails },
       { path: "/allorders", Component: AllOrders },
       { path: "/about", Component: About },
+      
+
 
       // 🔒 Protected User Routes
       {
-        path: "addcrops",
+        path: "/commondiseasedetails/:id",
         element: (
           <ProtectedRoute>
-            <AddCrops />
+            <CommonDiseaseDetails />
           </ProtectedRoute>
         ),
       },

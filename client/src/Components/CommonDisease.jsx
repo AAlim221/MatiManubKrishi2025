@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import { Link } from "react-router-dom"; 
 
 const CommonDisease = ({ t }) => {
   const [diseases, setDiseases] = useState([]);
@@ -64,7 +65,8 @@ const CommonDisease = ({ t }) => {
               className="flex gap-6 overflow-x-auto scroll-smooth scrollbar-hide px-2 pb-4"
             >
               {diseases.map((disease, idx) => (
-                <div
+                <Link
+                  to={`/commondiseasedetails/${disease._id}`} 
                   key={idx}
                   className="flex-shrink-0 w-72 sm:w-80 md:w-96 h-80 relative rounded-3xl overflow-hidden shadow-lg transition-transform duration-500 hover:scale-105 group"
                 >
@@ -79,7 +81,7 @@ const CommonDisease = ({ t }) => {
                     </h3>
                   </div>
                   <div className="absolute inset-0 bg-green-200 opacity-0 group-hover:opacity-10 transition-all duration-500 mix-blend-screen pointer-events-none" />
-                </div>
+                </Link>
               ))}
             </div>
           </div>

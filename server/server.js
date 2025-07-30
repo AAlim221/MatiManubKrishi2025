@@ -64,10 +64,8 @@ async function run() {
       .db("MatiManubKrishi")
       .collection("UserProblems");
     const userCollection = client.db("MatiManubKrishi").collection("Users");
-    const commonDiseaseCollection = client
-  .db("MatiManubKrishi")
-  .collection("CommonDisease");
-  const reviewsCollection = client.db("MatiManubKrishi").collection("Reviews");
+    const commonDiseaseCollection = client.db("MatiManubKrishi").collection("CommonDisease");
+    const reviewsCollection = client.db("MatiManubKrishi").collection("Reviews");
 
 
 
@@ -90,7 +88,7 @@ async function run() {
       }
     });
 
-    // Crops GET
+    // All Crops GET
     app.get("/crops", async (req, res) => {
       try {
         const crops = await cropsCollection.find({}).toArray();
@@ -101,6 +99,28 @@ async function run() {
           .send({ message: "Error retrieving crops", error: error.message });
       }
     });
+    // GET crops by season
+app.get("/crops/season/:seasonName", async (req, res) => {
+  const { seasonName } = req.params;
+
+  try {
+    const crops = await cropsCollection
+      .find({ seasonName: { $regex: new RegExp(seasonName, "i") } })
+      .toArray();
+
+    if (crops.length === 0) {
+      return res.status(404).send({ message: "No crops found for this season." });
+    }
+
+    res.status(200).send(crops);
+  } catch (error) {
+    res.status(500).send({
+      message: "Error retrieving crops by season",
+      error: error.message
+    });
+  }
+});
+
 
     // Product POST
     app.post("/products", async (req, res) => {
@@ -469,6 +489,22 @@ app.get("/common-diseases", async (req, res) => {
       message: "Failed to fetch common diseases",
       error: error.message,
     });
+  }
+});
+
+// GET single common disease by ID
+app.get("/common-diseases/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+    const disease = await commonDiseaseCollection.findOne({ _id: new ObjectId(id) });
+
+    if (!disease) {
+      return res.status(404).send({ message: "Disease not found" });
+    }
+
+    res.status(200).send(disease);
+  } catch (error) {
+    res.status(500).send({ message: "Error fetching disease", error: error.message });
   }
 });
 // GET all reviews

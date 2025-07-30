@@ -1,74 +1,75 @@
-import React, { useState } from 'react';
-
-const summerCrops = [
-  {
-    name: 'Aus Rice',
-    description: 'A variety of rice grown in the summer season.',
-    image: 'https://source.unsplash.com/300x200/?rice-field',
-  },
-  {
-    name: 'Jute',
-    description: 'A fiber plant cultivated in the summer season.',
-    image: 'https://source.unsplash.com/300x200/?jute',
-  },
-  {
-    name: 'Mango',
-    description: 'A tropical fruit, usually harvested in the summer season.',
-    image: 'https://source.unsplash.com/300x200/?mango',
-  },
-  {
-    name: 'Jackfruit',
-    description: 'A large tropical fruit harvested in the summer.',
-    image: 'https://source.unsplash.com/300x200/?jackfruit',
-  },
-  {
-    name: 'Pumpkin',
-    description: 'A vegetable grown during the summer season.',
-    image: 'https://source.unsplash.com/300x200/?pumpkin',
-  },
-  {
-    name: 'Gourd',
-    description: 'A summer vegetable known for its long vines.',
-    image: 'https://source.unsplash.com/300x200/?gourd',
-  }
-];
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { Link } from 'react-router-dom'; // ✅ Required for navigation
 
 function SummerPage() {
+  const [crops, setCrops] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
-  // Filter the crops based on the search term (case-insensitive)
-  const filteredCrops = summerCrops.filter(crop =>
-    crop.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    crop.description.toLowerCase().includes(searchTerm.toLowerCase())
+  useEffect(() => {
+    axios
+      .get('http://localhost:3000/crops/season/Summer') // ✅ Make sure this returns _id
+      .then((res) => setCrops(res.data))
+      .catch((err) => {
+        console.error('Failed to fetch crops', err);
+        setError('Failed to load summer crops. Please try again later.');
+      })
+      .finally(() => setLoading(false));
+  }, []);
+
+  const filteredCrops = crops.filter((crop) =>
+    crop.cropName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    crop.description?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
-    <div className="p-6">
-      <div className="mb-4">
+    <div className="p-6 bg-gradient-to-br from-yellow-100 via-green-50 to-green-100 min-h-screen">
+      <div className="mb-6 max-w-xl mx-auto">
         <input
           type="text"
-          placeholder="Search crops..."
-          className="p-2 border rounded-md w-full"
+          placeholder="🔍 Search summer crops..."
+          className="w-full p-3 rounded-lg border border-gray-300 shadow focus:outline-none focus:ring-2 focus:ring-green-400"
           value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)} // Update search term on input change
+          onChange={(e) => setSearchTerm(e.target.value)}
         />
       </div>
 
-      {/* Display filtered crops in a grid layout */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredCrops.map((crop, index) => (
-          <div
-            key={index}
-            className="bg-white rounded-2xl shadow-md hover:shadow-xl overflow-hidden transition"
-          >
-            <img src={crop.image} alt={crop.name} className="w-full h-48 object-cover" />
-            <div className="p-4">
-              <h2 className="text-xl font-bold text-green-700">{crop.name}</h2>
-              <p className="text-sm text-gray-600 mb-2">{crop.description}</p>
-            </div>
-          </div>
-        ))}
-      </div>
+      {loading ? (
+        <div className="text-center text-lg text-green-600">Loading crops...</div>
+      ) : error ? (
+        <div className="text-center text-red-600">{error}</div>
+      ) : filteredCrops.length === 0 ? (
+        <div className="text-center text-gray-600">No crops found.</div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          {filteredCrops.map((crop, index) => (
+            <Link
+              to={`/crop/${crop._id}`} // ✅ Navigate to crop details
+              key={index}
+              className="cursor-pointer"
+            >
+              <div className="bg-white rounded-2xl shadow-lg hover:shadow-green-300 transition-transform transform hover:-translate-y-1 overflow-hidden">
+                <img
+                  src={crop.imageUrl || 'https://via.placeholder.com/300x200?text=No+Image'}
+                  alt={crop.cropName}
+                  className="w-full h-48 object-cover"
+                />
+                <div className="p-4">
+                  <h2 className="text-xl font-semibold text-green-700">{crop.cropName}</h2>
+                  <p className="text-gray-600 text-sm mt-2">
+                    {crop.description || 'No description available.'}
+                  </p>
+                  <p className="text-xs text-gray-400 mt-1 italic">
+                    Soil: {crop.soilType || 'N/A'} | Location: {crop.location || 'N/A'}
+                  </p>
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
