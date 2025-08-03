@@ -1,21 +1,33 @@
 import React from "react";
 import { Phone, Mail, User, Sparkles, Info } from "lucide-react";
 
+import alimImg from '../assets/Admin/Alim.jpeg';
+import mahdeaImg from '../assets/Admin/Mahdea.jpeg';
+
+
 const admins = [
   {
-    name: "A.Alim",
+    name: "Farea Mahdea",
     position: "Founder & CEO",
-    img: "https://via.placeholder.com/150",
+    img: mahdeaImg,
+    phone: "+880 1811-654321",
+    email: "fareamahdea@example.com",
+  },
+  {
+    name: "A.Alim",
+    position: "Co-Founder & CTO",
+    img: alimImg,
     phone: "+880 1711-123456",
     email: "aalim@example.com",
   },
   {
-    name: "Farea Mahdea",
-    position: "Co-Founder & CTO",
-    img: "https://via.placeholder.com/150",
-    phone: "+880 1811-654321",
-    email: "fareamahdea@example.com",
-  },
+  name: "BlueChan",
+  position: "Manager",
+  img: "https://i.ibb.co/7XLw7g2/bluechan-profile.jpg",
+  phone: "+880 1711-123456",
+  email: "bluechan@example.com",
+},
+  
 ];
 
 const About = () => {
@@ -34,39 +46,66 @@ const About = () => {
           </p>
         </div>
 
-        {/* Admin Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-          {admins.map((admin, index) => (
-            <div
-              key={index}
-              className={`relative group bg-white rounded-3xl shadow-lg p-6 hover:shadow-2xl hover:scale-[1.02] transition duration-300 ease-in-out overflow-hidden
-                ${index === 1 ? "animated-diagonal" : ""}`}
-            >
-              {/* Diagonal overlay animation */}
-              {index === 1 && (
-                <div className="absolute inset-0 bg-gradient-to-tr from-green-100 to-transparent opacity-0 group-hover:opacity-100 transition duration-500 pointer-events-none z-0 rotate-[-10deg] scale-125"></div>
-              )}
+       {/* CEO Card on Top */}
+<div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 justify-center mb-10">
+  {admins.slice(0, 1).map((admin, index) => (
+    <div
+      key={index}
+      className="relative group bg-white rounded-3xl shadow-lg p-6 hover:shadow-2xl hover:scale-[1.02] transition duration-300 ease-in-out overflow-hidden"
+    >
+      <div className="absolute inset-0 bg-gradient-to-tr from-green-100 to-transparent opacity-0 group-hover:opacity-100 transition duration-500 pointer-events-none z-0 rotate-[-10deg] scale-125"></div>
 
-              <div className="flex flex-col items-center text-center relative z-10">
-                <img
-                  src={admin.img}
-                  alt={admin.name}
-                  className="w-28 h-28 rounded-full border-4 border-green-300 object-cover mb-4 transition-transform group-hover:rotate-2"
-                />
-                <h3 className="text-xl font-bold text-green-800">{admin.name}</h3>
-                <p className="text-green-600 mb-3">{admin.position}</p>
-                <div className="text-sm text-gray-600 space-y-2">
-                  <p className="flex items-center justify-center gap-2">
-                    <Phone className="w-4 h-4 text-green-500" /> {admin.phone}
-                  </p>
-                  <p className="flex items-center justify-center gap-2">
-                    <Mail className="w-4 h-4 text-green-500" /> {admin.email}
-                  </p>
-                </div>
-              </div>
-            </div>
-          ))}
+      <div className="flex flex-col items-center text-center relative z-10">
+        <img
+          src={admin.img}
+          alt={admin.name}
+          className="w-28 h-28 rounded-full border-4 border-green-300 object-cover mb-4 transition-transform group-hover:rotate-2"
+        />
+        <h3 className="text-xl font-bold text-green-800">{admin.name}</h3>
+        <p className="text-green-600 mb-3">{admin.position}</p>
+        <div className="text-sm text-gray-600 space-y-2">
+          <p className="flex items-center justify-center gap-2">
+            <Phone className="w-4 h-4 text-green-500" /> {admin.phone}
+          </p>
+          <p className="flex items-center justify-center gap-2">
+            <Mail className="w-4 h-4 text-green-500" /> {admin.email}
+          </p>
         </div>
+      </div>
+    </div>
+  ))}
+</div>
+
+{/* Team Members Below */}
+<div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+  {admins.slice(1).map((admin, index) => (
+    <div
+      key={index}
+      className="relative group bg-white rounded-3xl shadow-lg p-6 hover:shadow-2xl hover:scale-[1.02] transition duration-300 ease-in-out overflow-hidden"
+    >
+      <div className="absolute inset-0 bg-gradient-to-tr from-green-100 to-transparent opacity-0 group-hover:opacity-100 transition duration-500 pointer-events-none z-0 rotate-[-10deg] scale-125"></div>
+
+      <div className="flex flex-col items-center text-center relative z-10">
+        <img
+          src={admin.img}
+          alt={admin.name}
+          className="w-28 h-28 rounded-full border-4 border-green-300 object-cover mb-4 transition-transform group-hover:rotate-2"
+        />
+        <h3 className="text-xl font-bold text-green-800">{admin.name}</h3>
+        <p className="text-green-600 mb-3">{admin.position}</p>
+        <div className="text-sm text-gray-600 space-y-2">
+          <p className="flex items-center justify-center gap-2">
+            <Phone className="w-4 h-4 text-green-500" /> {admin.phone}
+          </p>
+          <p className="flex items-center justify-center gap-2">
+            <Mail className="w-4 h-4 text-green-500" /> {admin.email}
+          </p>
+        </div>
+      </div>
+    </div>
+  ))}
+</div>
+
 
         {/* Smart Generation Section */}
         <div className="bg-white rounded-3xl p-10 shadow-xl text-center">

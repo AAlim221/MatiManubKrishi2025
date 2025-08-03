@@ -206,40 +206,93 @@ const Market = () => {
 
   // Load products from backend
   useEffect(() => {
-    axios
-      .get(`${BASE_URL}/products`)
-      .then((res) => setProducts(res.data))
-      .catch((err) => console.error("Fetch failed:", err));
+   axios
+  .get(`${BASE_URL}/products`)
+  .then((res) => {
+    const productsWithStock = res.data.map((item) => ({
+      ...item,
+      stock: item.stock ?? 100, // if stock undefined, set to 100
+    }));
+    setProducts(productsWithStock);
+  })
+  .catch((err) => console.error("Fetch failed:", err));
+
   }, []);
+  
 
-  const handleAddToCart = (item) => {
-    setCart((prev) => {
-      const exists = prev.find((p) => p.name === item.name);
-      if (exists) {
-        return prev.map((p) =>
-          p.name === item.name ? { ...p, quantity: p.quantity + 1 } : p
-        );
-      }
-      return [...prev, { ...item, quantity: 1 }];
-    });
-    setShowModal(true);
-  };
 
-  const incrementQty = (index) => {
-    const updated = [...cart];
-    updated[index].quantity += 1;
-    setCart(updated);
-  };
 
-  const decrementQty = (index) => {
-    const updated = [...cart];
-    if (updated[index].quantity > 1) {
-      updated[index].quantity -= 1;
-    } else {
-      updated.splice(index, 1);
+const handleAddToCart = (item) => {
+  if (item.stock <= 0) {
+    alert("❌ Out of stock!");
+    return;
+  }
+
+  // Reduce stock in products list
+  setProducts((prevProducts) =>
+    prevProducts.map((p) =>
+      p.name === item.name
+        ? { ...p, stock: p.stock - 1 }
+        : p
+    )
+  );
+
+  // Add to cart
+  setCart((prev) => {
+    const exists = prev.find((p) => p.name === item.name);
+    if (exists) {
+      return prev.map((p) =>
+        p.name === item.name ? { ...p, quantity: p.quantity + 1 } : p
+      );
     }
-    setCart(updated);
-  };
+    return [...prev, { ...item, quantity: 1 }];
+  });
+
+  setShowModal(true);
+};
+
+const incrementQty = (index) => {
+  const item = cart[index];
+  const product = products.find((p) => p.name === item.name);
+  if (item.quantity >= product.stock) {
+    alert("❌ No more stock available!");
+    return;
+  }
+
+  const updated = [...cart];
+  updated[index].quantity += 1;
+
+  // Reduce from stock
+  setProducts((prevProducts) =>
+    prevProducts.map((p) =>
+      p.name === item.name ? { ...p, stock: p.stock - 1 } : p
+    )
+  );
+
+  setCart(updated);
+};
+
+
+const decrementQty = (index) => {
+  const item = cart[index];
+  const updated = [...cart];
+
+  // Restore stock when decreasing
+  setProducts((prevProducts) =>
+    prevProducts.map((p) =>
+      p.name === item.name ? { ...p, stock: p.stock + 1 } : p
+    )
+  );
+
+  if (updated[index].quantity > 1) {
+    updated[index].quantity -= 1;
+  } else {
+    updated.splice(index, 1);
+  }
+
+  setCart(updated);
+};
+
 
   const calculateTotal = (items) =>
     items
@@ -368,6 +421,10 @@ const Market = () => {
                 <p className="text-sm font-semibold text-gray-800 mt-2">
                   Price: <span className="text-red-500">{item.price}</span>
                 </p>
+                <p className="text-xs text-gray-500 mt-1">
+  Stock: {item.stock}
+</p>
+
               </div>
               <button
                 onClick={() => handleAddToCart(item)}

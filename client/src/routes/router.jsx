@@ -1,8 +1,8 @@
 import { createBrowserRouter } from "react-router-dom";
 //Layout
 
-import RootLayout from "../Components/RootLayout";
-import AdminLayout from "../Components/AdminLayout";
+import RootLayout from "../Layouts/RootLayout";
+import AdminLayout from "../Layouts/AdminLayout";
 //Home Page
 
 
@@ -45,7 +45,9 @@ import TotalOrders from "../Pages/TotalOrders";
 import UserProblem from "../Pages/AdminDash/UserProblem";
 import AllOrders from "../Pages/AllOrders";
 import AdminRoute from "./AdminRoute";
-
+import OurDoctors from "../Pages/AdminDash/OurDoctors";
+import WeatherMarket from "../Components/WeatherMarket";
+import WeatherUpzila from "../Pages/WeatherUpzila";
 
 
 
@@ -74,12 +76,13 @@ const router = createBrowserRouter([
       { path: "late-autumn", Component: LateAutumnPage },
       { path: "winter", Component: WinterPage },
       { path: "spring", Component: SpringPage },
-      { path: "/doctor/:id", Component: DoctorDetails },
       { path: "/allorders", Component: AllOrders },
       { path: "/about", Component: About },
+      { path: "/weather-alerts", Component: WeatherMarket },
+      { path:"/weatherdetails", Component:WeatherUpzila},
       
-
-
+      
+      
       // 🔒 Protected User Routes
       {
         path: "/commondiseasedetails/:id",
@@ -114,6 +117,14 @@ const router = createBrowserRouter([
           </ProtectedRoute>
         ),
       },
+      {
+        path: "/doctor/:id",
+        element: (
+          <ProtectedRoute>
+            <DoctorDetails />
+          </ProtectedRoute>
+        ),
+      },
     ],
   },
 
@@ -131,6 +142,7 @@ const router = createBrowserRouter([
     { path: "diseaseInfoAdd", element: <DiseaseInfoAdd /> },
     { path: "orders", element: <TotalOrders /> },
     { path: "userproblem", element: <UserProblem /> },
+    { path: "doctors", element: <OurDoctors /> },
   ],
 },
 // Admin login route (outside protected section)

@@ -95,5 +95,15 @@
       "weather": "Pleasant and Colorful",
       "crops": ["Boro Rice (seedling/growth)", "Flowers", "Tomato", "Cucumber"]
     }
+  },
+  "contact": {
+    "title": "📞 Contact Us",
+    "description": "Dear farmers, this contact form is completely free and made just for your service.",
+    "name": "Your Name",
+    "mobile": "Mobile Number",
+    "message": "Message",
+    "submit": "✉️ Send Message",
+    "successMessage": "Thank you! Your message has been sent successfully. We will contact you shortly.",
+    "errorMessage": "Failed to send message. Please try again later."
   }
 }

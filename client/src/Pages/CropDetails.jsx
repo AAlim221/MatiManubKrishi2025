@@ -36,7 +36,7 @@ const CropDetails = () => {
             }
             alt={crop.cropName}
             onError={(e) => (e.target.src = "/placeholder.jpg")}
-            className="w-full h-72 object-cover hover:scale-105 transition-transform duration-500"
+            className="w-full h-72  hover:scale-105 transition-transform duration-500"
           />
         </div>
 

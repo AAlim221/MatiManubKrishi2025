@@ -3,8 +3,6 @@ import React from 'react';
 function AdminHome() {
   return (
     <div className="p-6 max-w-6xl mx-auto">
-      <h1 className="text-3xl font-bold text-green-700 mb-4">👩‍🌾 Admin Dashboard</h1>
-      
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         <div className="bg-white shadow-md rounded-xl p-4 border-l-4 border-green-500">
           <h2 className="text-xl font-semibold text-gray-700">📥 New Messages</h2>

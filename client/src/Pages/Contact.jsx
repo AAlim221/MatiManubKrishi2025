@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useTranslation } from "react-i18next";
 
 function Contact() {
   const [formData, setFormData] = useState({
@@ -9,6 +10,7 @@ function Contact() {
   });
 
   const [submitted, setSubmitted] = useState(false);
+  const { t } = useTranslation(); // hook from react-i18next
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -25,21 +27,23 @@ function Contact() {
       setFormData({ name: '', mobile: '', message: '' });
     } catch (error) {
       console.error('❌ Submission error:', error);
-      alert('বার্তা পাঠাতে সমস্যা হয়েছে। পরে আবার চেষ্টা করুন।');
+      alert(t("contact.errorMessage"));
     }
   };
 
   return (
     <div className="p-6 max-w-xl mx-auto">
-      <h1 className="text-2xl font-bold text-center text-green-700 mb-4">📞 যোগাযোগ করুন</h1>
+      <h1 className="text-2xl font-bold text-center text-green-700 mb-4">
+        {t("contact.title")}
+      </h1>
 
       <p className="mb-6 text-center text-sm text-gray-700">
-        প্রিয় কৃষক ভাই ও বোনেরা, এই যোগাযোগ ব্যবস্থা সম্পূর্ণ <span className="font-bold text-green-600">ফ্রি</span> এবং শুধু আপনাদের সেবার জন্য তৈরি।
+        {t("contact.description")}
       </p>
 
       {submitted ? (
         <div className="bg-green-100 border-l-4 border-green-500 text-green-800 p-4 rounded">
-          ✅ ধন্যবাদ! আপনার বার্তা সফলভাবে পাঠানো হয়েছে। আমরা খুব শীঘ্রই যোগাযোগ করবো।
+          ✅ {t("contact.successMessage")}
         </div>
       ) : (
         <form
@@ -47,7 +51,9 @@ function Contact() {
           className="bg-white p-6 rounded-xl shadow-md space-y-4"
         >
           <div>
-            <label className="block mb-1 text-sm font-medium text-gray-700">আপনার নাম</label>
+            <label className="block mb-1 text-sm font-medium text-gray-700">
+              {t("contact.name")}
+            </label>
             <input
               type="text"
               name="name"
@@ -58,7 +64,9 @@ function Contact() {
             />
           </div>
           <div>
-            <label className="block mb-1 text-sm font-medium text-gray-700">মোবাইল নম্বর</label>
+            <label className="block mb-1 text-sm font-medium text-gray-700">
+              {t("contact.mobile")}
+            </label>
             <input
               type="text"
               name="mobile"
@@ -69,7 +77,9 @@ function Contact() {
             />
           </div>
           <div>
-            <label className="block mb-1 text-sm font-medium text-gray-700">বার্তা</label>
+            <label className="block mb-1 text-sm font-medium text-gray-700">
+              {t("contact.message")}
+            </label>
             <textarea
               name="message"
               rows="4"
@@ -83,7 +93,7 @@ function Contact() {
             type="submit"
             className="w-full bg-green-600 text-white py-2 rounded-md font-semibold hover:bg-green-700 transition"
           >
-            ✉️ বার্তা পাঠান
+            {t("contact.submit")}
           </button>
         </form>
       )}
