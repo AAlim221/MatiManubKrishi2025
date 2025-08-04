@@ -414,22 +414,104 @@ app.get("/orders/:id", async (req, res) => {
     });
 
     // Doctor POST
-    app.post("/doctors", upload.single("doctorImage"), async (req, res) => {
-      try {
-        const doctorData = req.body;
-        if (req.file) doctorData.imageUrl = `/uploads/${req.file.filename}`;
+    // Backend (Express route)
+app.post("/doctors", upload.single("doctorImage"), async (req, res) => {
+  try {
+    const doctorData = req.body;
 
-        const result = await doctorsCollection.insertOne(doctorData);
-        res.status(201).send({
-          message: "Doctor added successfully",
-          doctorId: result.insertedId,
-        });
-      } catch (error) {
-        res
-          .status(500)
-          .send({ message: "Failed to upload doctor", error: error.message });
-      }
+    // Convert specialization from comma-separated string to array
+    if (doctorData.specialization && typeof doctorData.specialization === "string") {
+      doctorData.specialization = doctorData.specialization
+        .split(",")
+        .map((item) => item.trim());
+    }
+
+    // Add image path if file uploaded
+    if (req.file) {
+      doctorData.image = `/uploads/${req.file.filename}`;
+    }
+
+    // Optional: Convert contact fields into nested object
+    doctorData.contact = {
+      phone: doctorData.phone || "",
+      mobile: doctorData.mobile || "",
+      email: doctorData.email || "",
+    };
+
+    // Remove individual contact fields to avoid duplication
+    delete doctorData.phone;
+    delete doctorData.mobile;
+    delete doctorData.email;
+
+    const result = await doctorsCollection.insertOne(doctorData);
+
+    res.status(201).send({
+      message: "Doctor added successfully",
+      doctorId: result.insertedId,
     });
+  } catch (error) {
+    res.status(500).send({
+      message: "Failed to upload doctor",
+      error: error.message,
+    });
+  }
+});
+// delete doctor
+app.delete("/doctors/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+    const result = await doctorsCollection.deleteOne({ _id: new ObjectId(id) });
+
+    if (result.deletedCount === 0) {
+      return res.status(404).send({ message: "Doctor not found" });
+    }
+
+    res.send({ message: "Doctor deleted successfully" });
+  } catch (error) {
+    res.status(500).send({ message: "Failed to delete doctor", error: error.message });
+  }
+});
+//doctor find by id 
+app.get("/doctors/:id", async (req, res) => {
+  const id = req.params.id;
+  const doctor = await doctorsCollection.findOne({ _id: new ObjectId(id) });
+  res.send(doctor);
+});
+// doctor updated by id
+app.put("/doctors/:id", upload.single("doctorImage"), async (req, res) => {
+  const id = req.params.id;
+  const updatedData = req.body;
+
+  // Optional: convert specialization back to array
+  if (updatedData.specialization && typeof updatedData.specialization === "string") {
+    updatedData.specialization = updatedData.specialization.split(",").map(s => s.trim());
+  }
+
+  // Image upload
+  if (req.file) {
+    updatedData.imageUrl = `/uploads/${req.file.filename}`;
+  }
+
+  // Re-group contact info
+  updatedData.contact = {
+    phone: updatedData.phone || "",
+    mobile: updatedData.mobile || "",
+    email: updatedData.email || "",
+  };
+
+  delete updatedData.phone;
+  delete updatedData.mobile;
+  delete updatedData.email;
+
+  await doctorsCollection.updateOne(
+    { _id: new ObjectId(id) },
+    { $set: updatedData }
+  );
+
+  res.send({ message: "Doctor updated successfully" });
+});
+
+
 
     // Doctor GET all
     app.get("/doctors", async (req, res) => {

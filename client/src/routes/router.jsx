@@ -4,8 +4,6 @@ import { createBrowserRouter } from "react-router-dom";
 import RootLayout from "../Layouts/RootLayout";
 import AdminLayout from "../Layouts/AdminLayout";
 //Home Page
-
-
 import Mati from "../Pages/Soil";
 import DoctorDetails from "../Pages/DoctorDetails";
 import CommonDiseaseDetails from "../Components/CommonDiseaseDetails";
@@ -49,8 +47,9 @@ import AdminRoute from "./AdminRoute";
 import OurDoctors from "../Pages/AdminDash/OurDoctors";
 import WeatherMarket from "../Components/WeatherMarket";
 import WeatherUpzila from "../Pages/WeatherUpzila";
-
 import TotalOrdersEdit from "../Pages/AdminDash/TotalOrdersEdit";
+import AddDoctor from "../Pages/AdminDash/AddDoctor";
+import EditDoctor from "../Pages/AdminDash/EditDoctor";
 
 const router = createBrowserRouter([
   {
@@ -143,6 +142,9 @@ const router = createBrowserRouter([
     { path: "totalorderedit/:id", element: <TotalOrdersEdit /> },
     { path: "userproblem", element: <UserProblem /> },
     { path: "doctors", element: <OurDoctors /> },
+    { path: "add-doctor", element: <AddDoctor /> },
+    { path: "edit-doctor/:id", element: <EditDoctor /> },
+    
   ],
 },
 // Admin login route (outside protected section)

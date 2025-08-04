@@ -25,10 +25,11 @@ function AdminLayout() {
         <nav className="space-y-2 mt-4">
           <Link to="/admin" className="block hover:text-yellow-300">Dashboard</Link>
           <Link to="/admin/orders" className="block hover:text-yellow-300">All Orders</Link>
+          <Link to="/admin/doctors" className="block hover:text-yellow-300"> Our Doctors</Link>
           <Link to="/admin/addcrops" className="block hover:text-yellow-300">AddCrops</Link>
           <Link to="/admin/diseaseInfoAdd" className="block hover:text-yellow-300">Disease Information Add</Link>
           <Link to="/admin/userproblem" className="block hover:text-yellow-300">All Farmers Problems</Link>
-          <Link to="/admin/doctors" className="block hover:text-yellow-300"> Our Doctors</Link>
+          
         </nav>
       </aside>
 
