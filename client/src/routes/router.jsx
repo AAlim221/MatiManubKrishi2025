@@ -40,8 +40,9 @@ import AdminHome from "../Pages/AdminDash/AdminHome";
 import AdminLogin from "../Pages/AdminDash/AdminLogin";
 import AddCrops from "../Pages/AdminDash/AddCrops";
 import AddProduct from "../Pages/AdminDash/AddProduct";
-import DiseaseInfoAdd from "../Pages/DiseaseInfoAdd";
-import TotalOrders from "../Pages/TotalOrders";
+import DiseaseInfoAdd from "../Pages/AdminDash/diseaseInfoAdd";
+import TotalOrders from "../Pages/AdminDash/TotalOrders";
+
 import UserProblem from "../Pages/AdminDash/UserProblem";
 import AllOrders from "../Pages/AllOrders";
 import AdminRoute from "./AdminRoute";
@@ -49,9 +50,7 @@ import OurDoctors from "../Pages/AdminDash/OurDoctors";
 import WeatherMarket from "../Components/WeatherMarket";
 import WeatherUpzila from "../Pages/WeatherUpzila";
 
-
-
-
+import TotalOrdersEdit from "../Pages/AdminDash/TotalOrdersEdit";
 
 const router = createBrowserRouter([
   {
@@ -141,6 +140,7 @@ const router = createBrowserRouter([
     { path: "addproduct", element: <AddProduct /> },
     { path: "diseaseInfoAdd", element: <DiseaseInfoAdd /> },
     { path: "orders", element: <TotalOrders /> },
+    { path: "totalorderedit/:id", element: <TotalOrdersEdit /> },
     { path: "userproblem", element: <UserProblem /> },
     { path: "doctors", element: <OurDoctors /> },
   ],

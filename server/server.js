@@ -150,7 +150,7 @@ app.get("/crops/season/:seasonName", async (req, res) => {
       }
     });
 
-    // Order POST
+    // Order one  order POST
     app.post("/orders", async (req, res) => {
       try {
         const invoice = req.body;
@@ -175,7 +175,8 @@ app.get("/crops/season/:seasonName", async (req, res) => {
           .send({ message: "Failed to save invoice", error: error.message });
       }
     });
-    // Order GET
+    //  For admin
+    // All Order GET
     app.get("/orders", async (req, res) => {
       try {
         const orders = await ordersCollection.find({}).toArray();
@@ -186,27 +187,91 @@ app.get("/crops/season/:seasonName", async (req, res) => {
           .send({ message: "Error retrieving orders", error: error.message });
       }
     });
-app.get("/orders", async (req, res) => {
-  const { email, startDate, endDate } = req.query;
-  let filter = {};
-
-  if (email) filter.userEmail = email;
-
-  if (startDate && endDate) {
-    filter.createdAt = {
-      $gte: new Date(startDate),
-      $lte: new Date(endDate),
-    };
-  }
-
+  // get all order login email
+  app.get("/orders", async (req, res) => {
+  const email = req.query.email; // e.g., /orders?email=user@gmail.com
+  const filter = email ? { email } : {};
   try {
     const orders = await ordersCollection.find(filter).toArray();
     res.status(200).send(orders);
   } catch (error) {
-    res.status(500).send({ message: "Error", error: error.message });
+    res
+      .status(500)
+      .send({ message: "Error retrieving orders", error: error.message });
   }
 });
 
+// DELETE /orders/:id
+app.delete("/orders/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const result = await ordersCollection.deleteOne({ _id: new ObjectId(id) });
+
+    if (result.deletedCount === 1) {
+      res.status(200).json({ message: "Order deleted successfully" });
+    } else {
+      res.status(404).json({ message: "Order not found" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: "Error deleting order", error });
+  }
+});
+//modifiying status
+app.patch("/orders/:id/confirm", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const result = await ordersCollection.updateOne(
+      { _id: new ObjectId(id) },
+      { $set: { status: "confirmed" } }
+    );
+
+    if (result.modifiedCount === 1) {
+      res.status(200).json({ message: "Order confirmed successfully" });
+    } else {
+      res.status(404).json({ message: "Order not found" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: "Error confirming order", error });
+  }
+});
+// update order by ID
+app.put("/orders/:id", async (req, res) => {
+  const { id } = req.params;
+  const updatedOrder = req.body;
+
+  try {
+    const result = await ordersCollection.updateOne(
+      { _id: new ObjectId(id) },
+      { $set: updatedOrder }
+    );
+
+    if (result.modifiedCount === 1) {
+      res.status(200).json({ message: "Order updated successfully" });
+    } else {
+      res.status(404).json({ message: "Order not found or no changes made" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: "Error updating order", error });
+  }
+});
+
+app.get("/orders/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const order = await ordersCollection.findOne({ _id: new ObjectId(id) });
+
+    if (!order) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+
+    res.status(200).json(order);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching order", error });
+  }
+});
 
 
     // Disease POST or check existing

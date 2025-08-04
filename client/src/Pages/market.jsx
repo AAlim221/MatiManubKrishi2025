@@ -3,6 +3,9 @@ import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import jsPDF from "jspdf";
 import { useLocation, useNavigate } from "react-router-dom";
+import { auth } from "../firebase/firebase.config";
+import { onAuthStateChanged } from "firebase/auth";
+
 
 // categories
 const categories = [
@@ -89,6 +92,7 @@ const base64ToBlob = (base64, mime) => {
 
 const Market = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const [userEmail, setUserEmail] = useState("");
   const [products, setProducts] = useState([]);
   const [cart, setCart] = useState(() => {
     const storedCart = localStorage.getItem(LOCAL_STORAGE_CART_KEY);
@@ -108,6 +112,17 @@ const Market = () => {
 
   const pdfUrlRef = useRef(null);
   const BASE_URL = "http://localhost:3000";
+  
+
+useEffect(() => {
+  const unsubscribe = onAuthStateChanged(auth, (user) => {
+    if (user) {
+      setUserEmail(user.email);
+    }
+  });
+  return () => unsubscribe();
+}, []);
+
 
   // Create object URL from base64 PDF and set in state
   const setPdfFromBase64 = (base64, forceOpen = false) => {
@@ -120,6 +135,7 @@ const Market = () => {
     setPdfUrl(url);
     if (forceOpen) setIsSidebarOpen(true);
   };
+
 
   // Save PDF base64 and language to IndexedDB
   const savePdfAndLanguageToIndexedDB = async (base64, lang) => {
@@ -310,12 +326,14 @@ const decrementQty = (index) => {
       return;
     }
 
-    const invoice = {
-      cart,
-      total: calculateTotal(cart),
-      paymentMode,
-      createdAt: new Date().toISOString(),
-    };
+   const invoice = {
+  cart,
+  total: calculateTotal(cart),
+  paymentMode,
+  createdAt: new Date().toISOString(),
+  email: userEmail, // ✅ include logged-in user email here
+};
+
 
     try {
       await axios.post(`${BASE_URL}/orders`, invoice);

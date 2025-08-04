@@ -1,18 +1,15 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import jsPDF from "jspdf";
-import "jspdf-autotable";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../firebase/firebase.config";
+import { FaMoneyBill, FaClock, FaEnvelope, FaCartPlus } from "react-icons/fa";
 
 function AllOrders() {
   const [orders, setOrders] = useState([]);
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [selectedOrder, setSelectedOrder] = useState(null);
 
-  // Get current Firebase user
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
@@ -20,132 +17,112 @@ function AllOrders() {
     return () => unsubscribe();
   }, []);
 
-  // Fetch orders (initial or on filter change)
   useEffect(() => {
-    if (!user?.email) return;
-
-    const isAdmin = user.email === "admin@example.com";
-    const params = {};
-
-    if (!isAdmin) params.email = user.email;
-    if (startDate) params.startDate = startDate;
-    if (endDate) params.endDate = endDate;
-
-    axios
-      .get("/orders", { params })
-      .then((res) => {
+    const fetchOrders = async () => {
+      if (!user?.email) return;
+      try {
+        const res = await axios.get("http://localhost:3000/orders", {
+          params: { email: user.email },
+        });
         setOrders(res.data);
         setLoading(false);
-      })
-      .catch((err) => {
-        console.error("Error fetching orders:", err);
+      } catch (err) {
+        console.error("Fetch failed:", err);
         setLoading(false);
-      });
-  }, [user, startDate, endDate]);
+      }
+    };
+    fetchOrders();
+  }, [user]);
 
-  // Download invoice PDF
-  const downloadPDF = (order, index) => {
-    const doc = new jsPDF();
+  const formatDate = (isoDate) => new Date(isoDate).toLocaleString();
 
-    doc.setFontSize(18);
-    doc.text("MatiManubKrishi - Order Invoice", 14, 15);
-
-    doc.setFontSize(12);
-    doc.text(`Order #: ${index + 1}`, 14, 25);
-    doc.text(`User: ${order.userEmail || user?.email}`, 14, 32);
-    doc.text(`Date: ${new Date(order.createdAt).toLocaleString()}`, 14, 39);
-    doc.text(`Payment Mode: ${order.paymentMode}`, 14, 46);
-
-    const tableRows = order.cart.map((item, idx) => [
-      idx + 1,
-      item.name,
-      item.category,
-      item.quantity,
-      item.price,
-    ]);
-
-    doc.autoTable({
-      startY: 52,
-      head: [["#", "Product", "Category", "Qty", "Price"]],
-      body: tableRows,
-    });
-
-    doc.text(`Total: ৳${order.total}`, 14, doc.lastAutoTable.finalY + 10);
-    doc.save(`invoice_order_${index + 1}.pdf`);
-  };
+  if (loading) return <p className="text-center mt-10">Loading orders...</p>;
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">All Orders</h1>
+    <div className="max-w-6xl mx-auto p-4">
+      <h2 className="text-2xl font-bold text-center mb-6">
+       All Orders
+      </h2>
 
-      {/* Filters */}
-      <div className="flex flex-wrap gap-4 mb-6">
-        <div>
-          <label className="block text-sm font-medium">Start Date</label>
-          <input
-            type="date"
-            value={startDate}
-            onChange={(e) => setStartDate(e.target.value)}
-            className="border p-2 rounded"
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium">End Date</label>
-          <input
-            type="date"
-            value={endDate}
-            onChange={(e) => setEndDate(e.target.value)}
-            className="border p-2 rounded"
-          />
-        </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        {orders.map((order, idx) => (
+          <div
+            key={idx}
+            onClick={() => setSelectedOrder(order)}
+            className="bg-white rounded-xl shadow hover:shadow-xl transition p-5 cursor-pointer border border-gray-200"
+          >
+            <h3 className="text-md font-bold text-gray-800 mb-2">
+              Order ID:{" "}
+              <span className="text-blue-600">{order._id.slice(-6)}</span>
+            </h3>
+            <div className="text-sm text-gray-600 space-y-1">
+              <p className="flex items-center gap-2">
+                <FaCartPlus /> Total:{" "}
+                <span className="font-semibold">৳{order.total}</span>
+              </p>
+              <p className="flex items-center gap-2">
+                <FaMoneyBill /> Payment: {order.paymentMode}
+              </p>
+              <p className="flex items-center gap-2">
+                <FaClock /> Date: {formatDate(order.createdAt)}
+              </p>
+              <p className="flex items-center gap-2">
+                <FaEnvelope /> {order.email || user.email}
+              </p>
+            </div>
+          </div>
+        ))}
       </div>
 
-      {/* Orders List */}
-      {loading ? (
-        <p>Loading orders...</p>
-      ) : orders.length === 0 ? (
-        <p>No orders found.</p>
-      ) : (
-        <div className="space-y-6">
-          {orders.map((order, index) => (
-            <div key={index} className="border p-4 rounded-lg shadow bg-white">
-              <div className="flex justify-between items-center mb-2">
-                <h2 className="text-lg font-semibold">
-                  Order #{index + 1} — {new Date(order.createdAt).toLocaleString()}
-                </h2>
-                <button
-                  onClick={() => downloadPDF(order, index)}
-                  className="bg-green-600 text-white px-4 py-1 rounded hover:bg-green-700"
+      {/* Popup / Details View */}
+      {selectedOrder && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white w-full max-w-2xl rounded-xl shadow-lg p-6 relative overflow-y-auto max-h-[80vh]">
+            <button
+              className="absolute top-3 right-4 text-xl font-bold"
+              onClick={() => setSelectedOrder(null)}
+            >
+              &times;
+            </button>
+            <h2 className="text-xl font-bold mb-4 text-blue-600">
+              Order Details
+            </h2>
+
+            <p className="mb-3 text-gray-700">
+              <strong>Total:</strong> ৳{selectedOrder.total} <br />
+              <strong>Payment:</strong> {selectedOrder.paymentMode} <br />
+              <strong>Date:</strong> {formatDate(selectedOrder.createdAt)} <br />
+              <strong>Email:</strong> {selectedOrder.email || user.email}
+            </p>
+
+            <h3 className="text-md font-semibold text-gray-800 mb-2">
+              Cart Items:
+            </h3>
+            <ul className="space-y-3">
+              {selectedOrder.cart.map((item, i) => (
+                <li
+                  key={i}
+                  className="border rounded-md p-3 flex gap-4 items-center"
                 >
-                  Download Invoice
-                </button>
-              </div>
-
-              <p className="text-sm text-gray-600">
-                {order.userEmail && <span>User: {order.userEmail} | </span>}
-                Payment: {order.paymentMode} | Total: ৳{order.total}
-              </p>
-
-              <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
-                {order.cart.map((item, idx) => (
-                  <li
-                    key={idx}
-                    className="border rounded-md p-3 bg-gray-50 shadow-sm"
-                  >
-                    <img
-                      src={item.image}
-                      alt={item.name}
-                      className="w-full h-32 object-cover rounded mb-2"
-                    />
-                    <h3 className="font-medium">{item.name}</h3>
-                    <p className="text-sm">Category: {item.category}</p>
-                    <p className="text-sm">Price: {item.price}</p>
-                    <p className="text-sm">Quantity: {item.quantity}</p>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+                  <img
+                    src={item.image}
+                    alt={item.name}
+                    className="w-16 h-16 rounded object-cover border"
+                  />
+                  <div>
+                    <p className="font-semibold">{item.name}</p>
+                    <p className="text-sm text-gray-600">
+                      Category: {item.category}
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      Quantity: {item.quantity}
+                    </p>
+                    <p className="text-sm text-gray-600">Price: {item.price}</p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       )}
     </div>
