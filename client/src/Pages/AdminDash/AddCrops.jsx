@@ -23,6 +23,7 @@ function AddCrops() {
   });
 
   const [cropImage, setCropImage] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -34,13 +35,16 @@ function AddCrops() {
   };
 
   const handleImageChange = (e) => {
-    setCropImage(e.target.files[0]);
+    const file = e.target.files[0];
+    if (file) {
+      setCropImage(file);
+      setPreviewUrl(URL.createObjectURL(file));
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validate required fields
     const missingField = Object.values(formData).some((val) => !val);
     if (missingField || !cropImage) {
       setError("All fields including image are required.");
@@ -70,7 +74,6 @@ function AddCrops() {
         confirmButtonColor: "#22c55e",
       });
 
-      // Reset form
       setFormData({
         seasonName: "",
         cropName: "",
@@ -90,6 +93,7 @@ function AddCrops() {
         marketTarget: "",
       });
       setCropImage(null);
+      setPreviewUrl(null);
     } catch (err) {
       console.error(err);
       setError(`Error: ${err.response?.data?.message || err.message}`);
@@ -124,6 +128,13 @@ function AddCrops() {
         <div>
           <label className="block text-sm font-medium text-gray-700">Crop Image</label>
           <input type="file" accept="image/*" onChange={handleImageChange} required />
+          {previewUrl && (
+            <img
+              src={previewUrl}
+              alt="Preview"
+              className="mt-2 rounded border h-40 w-auto object-cover"
+            />
+          )}
         </div>
       </div>
 

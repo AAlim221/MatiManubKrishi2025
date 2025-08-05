@@ -6,13 +6,14 @@ import os
 import uuid
 from pymongo import MongoClient
 from dotenv import load_dotenv
+import traceback
 
-# Load environment variables
+# Load environment variables from .env file
 load_dotenv()
 
 app = Flask(__name__)
 
-# CORS configuration
+# CORS setup
 CORS(app,
      resources={r"/*": {"origins": "http://localhost:5173"}},
      supports_credentials=True,
@@ -24,17 +25,26 @@ CORS(app,
 UPLOAD_FOLDER = "uploads"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
-# Load trained model
-model = tf.keras.models.load_model("trained_model.h5")
+# Load trained TensorFlow model
+try:
+    model = tf.keras.models.load_model("trained_model.h5")
+    print("✅ Model loaded successfully")
+except Exception as e:
+    print("❌ Error loading model:", str(e))
+    model = None
 
 # MongoDB connection
 MONGO_USER = os.environ.get("DB_USER")
 MONGO_PASS = os.environ.get("DB_PASS")
-
 mongo_uri = f"mongodb+srv://{MONGO_USER}:{MONGO_PASS}@cluster0.ygjzcip.mongodb.net/MatiManubKrishi?retryWrites=true&w=majority"
-client = MongoClient(mongo_uri)
-db = client["MatiManubKrishi"]
-disease_collection = db["DiseaseInfo"]
+try:
+    client = MongoClient(mongo_uri)
+    db = client["MatiManubKrishi"]
+    disease_collection = db["DiseaseInfo"]
+    print("✅ Connected to MongoDB")
+except Exception as e:
+    print("❌ MongoDB connection error:", str(e))
+    disease_collection = None
 
 # Disease class names
 class_name = [
@@ -55,20 +65,29 @@ class_name = [
     'Tomato___Tomato_mosaic_virus', 'Tomato___healthy'
 ]
 
-# Preprocess function
+# Preprocessing function
 def preprocess_image(image_path):
-    img = tf.keras.preprocessing.image.load_img(image_path, target_size=(128, 128))
-    input_arr = tf.keras.preprocessing.image.img_to_array(img)
-    input_arr = np.expand_dims(input_arr, axis=0)
-    prediction = model.predict(input_arr)
-    result_index = np.argmax(prediction)
-    confidence = float(np.max(prediction)) * 100
-    return result_index, confidence
+    try:
+        img = tf.keras.preprocessing.image.load_img(image_path, target_size=(128, 128))
+        input_arr = tf.keras.preprocessing.image.img_to_array(img)
+        input_arr = np.expand_dims(input_arr, axis=0)
+        prediction = model.predict(input_arr)
+        result_index = np.argmax(prediction)
+        confidence = float(np.max(prediction)) * 100
+        return result_index, confidence
+    except Exception as e:
+        raise ValueError(f"❌ Image preprocessing failed: {str(e)}")
 
-# Prediction endpoint
+# Prediction API
 @app.route("/predict", methods=["POST"])
 def predict():
     try:
+        if model is None:
+            return jsonify({"error": "Model not loaded"}), 500
+
+        if disease_collection is None:
+            return jsonify({"error": "Database not connected"}), 500
+
         if "image" not in request.files:
             return jsonify({"error": "No image uploaded"}), 400
 
@@ -76,13 +95,14 @@ def predict():
         filename = f"{uuid.uuid4()}.jpg"
         filepath = os.path.join(UPLOAD_FOLDER, filename)
         file.save(filepath)
+        print("📷 Image saved to:", filepath)
 
         result_index, confidence = preprocess_image(filepath)
         predicted_disease = class_name[result_index]
-        print("Predicted Disease:", predicted_disease)
+        print("🔍 Predicted Disease:", predicted_disease)
 
         disease_data = disease_collection.find_one({"diseaseName": predicted_disease})
-        print("Disease data from DB:", disease_data)
+        print("📄 DB result:", disease_data)
 
         if disease_data is None:
             return jsonify({
@@ -93,7 +113,6 @@ def predict():
                 "plantCareAdvice": "-"
             }), 200
 
-        # Remove MongoDB ObjectId before returning
         disease_data.pop("_id", None)
 
         return jsonify({
@@ -105,14 +124,15 @@ def predict():
         }), 200
 
     except Exception as e:
-        print("🔥 Exception:", str(e))
+        print("🔥 EXCEPTION in /predict:")
+        traceback.print_exc()
         return jsonify({"error": str(e)}), 500
 
-# Test route
+# Root test route
 @app.route("/")
 def home():
     return "Flask Prediction Server Running"
 
-# Run the server
+# Run server
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5050, debug=True)

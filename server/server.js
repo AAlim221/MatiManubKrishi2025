@@ -99,6 +99,44 @@ async function run() {
           .send({ message: "Error retrieving crops", error: error.message });
       }
     });
+    // ✅ Update Crop by ID
+app.put("/crops/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+    const updateDoc = { $set: req.body };
+
+    const result = await cropsCollection.updateOne(
+      { _id: new ObjectId(id) },
+      updateDoc
+    );
+
+    if (result.matchedCount === 0) {
+      return res.status(404).send({ message: "Crop not found" });
+    }
+
+    res.send({ message: "Crop updated successfully" });
+  } catch (error) {
+    res.status(500).send({ message: "Update failed", error: error.message });
+  }
+});
+//put 
+app.put("/crops/:id", upload.single("cropImage"), async (req, res) => {
+  const id = req.params.id;
+  const updateData = req.body;
+
+  if (req.file) {
+    updateData.imageUrl = `/uploads/${req.file.filename}`;
+  }
+
+  await cropsCollection.updateOne(
+    { _id: new ObjectId(id) },
+    { $set: updateData }
+  );
+
+  res.send({ message: "Crop updated" });
+});
+
+
     // GET crops by season
 app.get("/crops/season/:seasonName", async (req, res) => {
   const { seasonName } = req.params;
@@ -120,6 +158,21 @@ app.get("/crops/season/:seasonName", async (req, res) => {
     });
   }
 });
+// DELETE /crops/:id
+app.delete("/crops/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+    const result = await cropsCollection.deleteOne({ _id: new ObjectId(id) });
+    if (result.deletedCount === 1) {
+      res.status(200).send({ message: "Crop deleted successfully" });
+    } else {
+      res.status(404).send({ message: "Crop not found" });
+    }
+  } catch (error) {
+    res.status(500).send({ message: "Error deleting crop", error: error.message });
+  }
+});
+
 
 
     // Product POST
@@ -323,6 +376,30 @@ app.get("/orders/:id", async (req, res) => {
         });
       }
     });
+    // Disease GET all
+    app.get("/diseases/all", async (req, res) => {
+  try {
+    const allDiseases = await diseaseInfoCollection.find({}).toArray();
+    res.status(200).send(allDiseases);
+  } catch (error) {
+    res.status(500).send({
+      message: "Failed to fetch all disease info",
+      error: error.message,
+    });
+  }
+});
+// Delete route for a disease
+app.delete("/diseases/:id", async (req, res) => {
+  try {
+    const result = await diseaseInfoCollection.deleteOne({ _id: new ObjectId(req.params.id) });
+    if (result.deletedCount === 0) return res.status(404).send({ message: "Disease not found" });
+    res.send({ message: "Disease deleted successfully" });
+  } catch (error) {
+    res.status(500).send({ message: "Failed to delete disease", error: error.message });
+  }
+});
+
+
 
     // Disease GET by param
     app.get("/diseases/:diseaseName", async (req, res) => {
@@ -339,32 +416,50 @@ app.get("/orders/:id", async (req, res) => {
           .send({ message: "Failed to fetch disease", error: error.message });
       }
     });
+    
 
     // Disease UPDATE
-    app.put("/diseases/update", async (req, res) => {
-      try {
-        const { diseaseName, suggestedPesticide, treatment, plantCareAdvice } =
-          req.body;
 
-        const result = await diseaseInfoCollection.updateOne(
-          { diseaseName },
-          { $set: { suggestedPesticide, treatment, plantCareAdvice } }
-        );
 
-        if (result.matchedCount === 0) {
-          return res
-            .status(404)
-            .send({ message: "Disease not found to update" });
-        }
+app.patch("/diseases/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
 
-        res.status(200).send({ message: "Disease info updated successfully" });
-      } catch (error) {
-        res.status(500).send({
-          message: "Failed to update disease info",
-          error: error.message,
-        });
+    // 🛑 Validate ObjectId
+    if (!ObjectId.isValid(id)) {
+      return res.status(400).send({ message: "Invalid ID format" });
+    }
+
+    const updateFields = req.body;
+
+    // 🛠️ Sanitize fields (optional)
+    const allowedFields = ["diseaseName", "suggestedPesticide", "treatment", "plantCareAdvice"];
+    const update = {};
+    allowedFields.forEach((key) => {
+      if (updateFields[key] !== undefined) {
+        update[key] = updateFields[key];
       }
     });
+
+    const result = await diseaseInfoCollection.updateOne(
+      { _id: new ObjectId(id) },
+      { $set: update }
+    );
+
+    if (result.matchedCount === 0) {
+      return res.status(404).send({ message: "Disease not found" });
+    }
+
+    res.send({ message: "Disease updated successfully", result });
+  } catch (error) {
+    console.error("❌ Edit error:", error);
+    res.status(500).send({
+      message: "Internal Server Error",
+      error: error.message,
+    });
+  }
+});
+
 
     // Blog GET all
     app.get("/blogs", async (req, res) => {
@@ -595,36 +690,32 @@ app.put("/doctors/:id", upload.single("doctorImage"), async (req, res) => {
         res.status(500).json({ message: "Failed to fetch messages" });
       }
     });
-    // server.js or routes/admin.js
-    app.post("/api/admin-login", async (req, res) => {
-      const { email, password } = req.body;
+    // PATCH route all contact
+  app.patch('/api/contact/:id', async (req, res) => {
+    const { id } = req.params;
+    const { status } = req.body;
 
-      try {
-        const user = await userCollection.findOne({ email });
-        if (!user || user.password !== password) {
-          return res.json({ success: false, message: "Invalid credentials" });
-        }
+    if (!status) {
+      return res.status(400).send({ message: 'Status is required' });
+    }
 
-        return res.json({ success: true });
-      } catch (err) {
-        console.error("❌ Admin login error:", err);
-        return res.status(500).json({ success: false, error: err.message });
+    try {
+      const result = await contactCollection.updateOne(
+        { _id: new ObjectId(id) },
+        { $set: { status } }
+      );
+
+      if (result.modifiedCount === 1) {
+        res.send({ message: 'Status updated successfully' });
+      } else {
+        res.status(404).send({ message: 'Message not found' });
       }
-    });
-    app.get("/api/check-admin/:email", async (req, res) => {
-      const email = req.params.email;
-      try {
-        const admin = await userCollection.findOne({ email, role: "admin" }); // dynamic
-        if (admin) {
-          return res.json({ isAdmin: true });
-        } else {
-          return res.json({ isAdmin: false });
-        }
-      } catch (err) {
-        console.error("❌ Admin check error:", err);
-        return res.status(500).json({ isAdmin: false, error: err.message });
-      }
-    });
+    } catch (err) {
+      res.status(500).send({ message: 'Update failed', error: err.message });
+    }
+  });
+
+    
     //common disease part
     // GET all common diseases
 app.get("/common-diseases", async (req, res) => {
@@ -654,6 +745,60 @@ app.get("/common-diseases/:id", async (req, res) => {
     res.status(500).send({ message: "Error fetching disease", error: error.message });
   }
 });
+// ✅ POST: Admin Login
+app.post("/api/admin-login", async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    const user = await userCollection.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+
+    if (user.password === password) {
+      res.status(200).json({ success: true, message: "Login successful" });
+    } else {
+      res.status(401).json({ success: false, message: "Incorrect password" });
+    }
+  } catch (err) {
+    res.status(500).json({ success: false, message: "Server error", error: err.message });
+  }
+});
+// by email
+app.get("/api/check-admin/:email", async (req, res) => {
+  const email = req.params.email;
+  try {
+    const admin = await userCollection.findOne({ email, role: "admin" });
+    res.json({ isAdmin: !!admin });
+  } catch (err) {
+    res.status(500).json({ isAdmin: false, error: err.message });
+  }
+});
+
+// 📌 GET /admin/:email => returns full admin profile
+app.get("/admin/:email", async (req, res) => {
+  try {
+    const email = req.params.email;
+    const admin = await userCollection.findOne(
+      { email },
+      { projection: { password: 0 } } // hide password
+    );
+
+    if (admin) {
+      res.status(200).json(admin);
+    } else {
+      res.status(404).json({ message: "Admin not found" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+});
+
+
+
+
+
 // GET all reviews
 app.get("/reviews", async (req, res) => {
   try {
@@ -666,6 +811,7 @@ app.get("/reviews", async (req, res) => {
     });
   }
 });
+
 
     await client.db("admin").command({ ping: 1 });
     console.log("MongoDB connection is healthy!");

@@ -497,7 +497,7 @@ function Plantdiseaseditect() {
           </select>
         </div>
 
-        <div className="flex flex-col items-center justify-center min-h-[50vh] text-center">
+        <div className="flex flex-col items-center justify-center mb-6 text-center">
           {/* Upload Label */}
           <label className="flex text-3xl font-extrabold text-green-900  tracking-wide items-center gap-2 select-none drop-shadow-md bg-gradient-to-r from-green-900 to-green-200 bg-clip-text">
             {translations[language].uploadLabel}
@@ -509,7 +509,7 @@ function Plantdiseaseditect() {
             type="file"
             accept="image/*"
             onChange={handleImageChange}
-            className="w-full max-w-md text-gray-700 file:mr-4 file:py-2 file:px-6 file:rounded-full file:border-0 file:bg-green-800 file:text-green-200 hover:file:bg-green-700 transition mb-6"
+            className="w-full max-w-md  mt-4 text-gray-700 file:mr-4 file:py-2 file:px-6 file:rounded-full file:border-0 file:bg-green-800 file:text-green-200 hover:file:bg-green-700 transition mb-6"
           />
         </div>
 

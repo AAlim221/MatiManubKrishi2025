@@ -36,12 +36,10 @@ import ProtectedRoute from "../routes/ProtectedRoute";
 //admin
 import AdminHome from "../Pages/AdminDash/AdminHome";
 import AdminLogin from "../Pages/AdminDash/AdminLogin";
-import AddCrops from "../Pages/AdminDash/AddCrops";
 import AddProduct from "../Pages/AdminDash/AddProduct";
 import DiseaseInfoAdd from "../Pages/AdminDash/diseaseInfoAdd";
 import TotalOrders from "../Pages/AdminDash/TotalOrders";
-
-import UserProblem from "../Pages/AdminDash/UserProblem";
+import UserProblem from "../Pages/AdminDash/FarmersProblem.jsx";
 import AllOrders from "../Pages/AllOrders";
 import AdminRoute from "./AdminRoute";
 import OurDoctors from "../Pages/AdminDash/OurDoctors";
@@ -50,6 +48,12 @@ import WeatherUpzila from "../Pages/WeatherUpzila";
 import TotalOrdersEdit from "../Pages/AdminDash/TotalOrdersEdit";
 import AddDoctor from "../Pages/AdminDash/AddDoctor";
 import EditDoctor from "../Pages/AdminDash/EditDoctor";
+import AllDiseaseAIInfo from "../Pages/AdminDash/AllDiseaseAiinfo";
+import AddCrops from "../Pages/AdminDash/AddCrops";
+import AllCropsdetails from "../Pages/AdminDash/AllCropsdetails.jsx"
+import EditCrop from "../Pages/AdminDash/EditCrop.jsx";
+import AdminProfile from "../Pages/AdminDash/AdminProfile.jsx";
+
 
 const router = createBrowserRouter([
   {
@@ -135,15 +139,23 @@ const router = createBrowserRouter([
   ),
   children: [
     { index: true, element: <AdminHome /> },
-    { path: "addcrops", element: <AddCrops /> },
     { path: "addproduct", element: <AddProduct /> },
-    { path: "diseaseInfoAdd", element: <DiseaseInfoAdd /> },
     { path: "orders", element: <TotalOrders /> },
     { path: "totalorderedit/:id", element: <TotalOrdersEdit /> },
     { path: "userproblem", element: <UserProblem /> },
     { path: "doctors", element: <OurDoctors /> },
     { path: "add-doctor", element: <AddDoctor /> },
     { path: "edit-doctor/:id", element: <EditDoctor /> },
+     { path: "diseaseInfoAdd", element: <DiseaseInfoAdd /> },
+    { path: "diseaseinfoai", element: <AllDiseaseAIInfo /> },
+    { path: "addcrops", element: <AddCrops /> },
+    { path: "all-crops-details", element: <AllCropsdetails /> },
+    { path: "edit-crop/:id", element: <EditCrop /> },
+    { path: "profile", element: <AdminProfile /> }
+
+   
+   
+
     
   ],
 },

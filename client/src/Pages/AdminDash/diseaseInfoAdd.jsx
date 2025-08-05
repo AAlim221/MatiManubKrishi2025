@@ -1,6 +1,8 @@
+// ✅ FILE: AddDiseaseInfo.jsx
 import React, { useState } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 function AddDiseaseInfo() {
   const [formData, setFormData] = useState({
@@ -12,6 +14,7 @@ function AddDiseaseInfo() {
 
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData((prev) => ({
@@ -20,92 +23,88 @@ function AddDiseaseInfo() {
     }));
   };
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validate required fields
     const missingField = Object.values(formData).some((val) => !val);
-    if (missingField ) {
+    if (missingField) {
       setError("All fields are required.");
       return;
     }
 
-
     setError("");
     setLoading(true);
 
-   try {
-    // First: Check if disease already exists
-    const { data: existingDisease } = await axios.get(`http://localhost:3000/diseases/${formData.diseaseName}`);
+    try {
+      const { data: existingDisease } = await axios.get(`http://localhost:3000/diseases/${formData.diseaseName}`);
 
-    if (existingDisease) {
-      // If exists: show confirmation dialog
-      const result = await Swal.fire({
-        icon: "warning",
-        title: "Disease already exists",
-        text: "Do you want to update the existing disease information?",
-        showCancelButton: true,
-        confirmButtonColor: "#22c55e",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Yes, update it!",
-      });
-
-      if (result.isConfirmed) {
-        // Send PUT request to update disease
-        await axios.put("http://localhost:3000/diseases/update", formData);
-
-        Swal.fire({
-          icon: "success",
-          title: "Updated!",
-          text: "Disease information has been updated.",
+      if (existingDisease) {
+        const result = await Swal.fire({
+          icon: "warning",
+          title: "Disease already exists",
+          text: "Do you want to update the existing disease information?",
+          showCancelButton: true,
           confirmButtonColor: "#22c55e",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Yes, update it!",
         });
-      }
 
-    } else {
-      // If doesn't exist: send POST to create
-      await axios.post("http://localhost:3000/diseases", formData, {
-        headers: { "Content-Type": "application/json" },
-      });
+        if (result.isConfirmed) {
+          await axios.put("http://localhost:3000/diseases/update", formData);
 
-      Swal.fire({
-        icon: "success",
-        title: "Disease Info Added",
-        text: "Disease information added successfully!",
-        confirmButtonColor: "#22c55e",
-      });
-    }
+          Swal.fire({
+            icon: "success",
+            title: "Updated!",
+            text: "Disease information has been updated.",
+            confirmButtonColor: "#22c55e",
+          }).then(() => {
+            navigate("/admin/diseaseinfoai");
+          });
+        }
+      } else {
+        await axios.post("http://localhost:3000/diseases", formData, {
+          headers: { "Content-Type": "application/json" },
+        });
 
-      // Reset form
-    setFormData({
-      diseaseName: "",
-      suggestedPesticide: "",
-      treatment: "",
-      plantCareAdvice: "",
-    });
-
-  } catch (err) {
-    if (err.response?.status === 404) {
-      // Disease not found on GET — create new
-      try {
-        await axios.post("http://localhost:3000/diseases", formData);
         Swal.fire({
           icon: "success",
           title: "Disease Info Added",
           text: "Disease information added successfully!",
           confirmButtonColor: "#22c55e",
+        }).then(() => {
+          navigate("/admin/diseaseinfoai");
         });
-      } catch (postErr) {
-        setError(`Error: ${postErr.response?.data?.message || postErr.message}`);
       }
-    } else {
-      setError(`Error: ${err.response?.data?.message || err.message}`);
+
+      setFormData({
+        diseaseName: "",
+        suggestedPesticide: "",
+        treatment: "",
+        plantCareAdvice: "",
+      });
+
+    } catch (err) {
+      if (err.response?.status === 404) {
+        try {
+          await axios.post("http://localhost:3000/diseases", formData);
+          Swal.fire({
+            icon: "success",
+            title: "Disease Info Added",
+            text: "Disease information added successfully!",
+            confirmButtonColor: "#22c55e",
+          }).then(() => {
+            navigate("/admin/diseaseinfoai");
+          });
+        } catch (postErr) {
+          setError(`Error: ${postErr.response?.data?.message || postErr.message}`);
+        }
+      } else {
+        setError(`Error: ${err.response?.data?.message || err.message}`);
+      }
+    } finally {
+      setLoading(false);
     }
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6 p-6 bg-white rounded shadow-lg max-w-3xl mx-auto">
@@ -129,8 +128,6 @@ function AddDiseaseInfo() {
             />
           </div>
         ))}
-
-        
       </div>
 
       <button
