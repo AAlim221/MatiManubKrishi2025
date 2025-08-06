@@ -3,6 +3,7 @@ import { createBrowserRouter } from "react-router-dom";
 
 import RootLayout from "../Layouts/RootLayout";
 import AdminLayout from "../Layouts/AdminLayout";
+import DoctorLayout from "../Layouts/DoctorLayout.jsx";
 //Home Page
 import Mati from "../Pages/Soil";
 import DoctorDetails from "../Pages/DoctorDetails";
@@ -53,7 +54,11 @@ import AddCrops from "../Pages/AdminDash/AddCrops";
 import AllCropsdetails from "../Pages/AdminDash/AllCropsdetails.jsx"
 import EditCrop from "../Pages/AdminDash/EditCrop.jsx";
 import AdminProfile from "../Pages/AdminDash/AdminProfile.jsx";
-
+import DoctorWorkpanel from "../Pages/DoctorDashbroad/DoctorWorkpanel.jsx";
+import DoctorHome from "../Pages/DoctorDashbroad/DoctorHome.jsx";
+import DoctorLogin from "../Pages/DoctorDashbroad/Doctorlogin.jsx";
+import DoctorRoute from "./DoctorRoute.jsx";
+import EditProfileFarmer from "../Components/EditProfileFarmer.jsx";
 
 const router = createBrowserRouter([
   {
@@ -82,6 +87,9 @@ const router = createBrowserRouter([
       { path: "/about", Component: About },
       { path: "/weather-alerts", Component: WeatherMarket },
       { path:"/weatherdetails", Component:WeatherUpzila},
+      { path: "editprofile/:uid", element: <EditProfileFarmer /> },
+
+      
       
       
       
@@ -152,10 +160,6 @@ const router = createBrowserRouter([
     { path: "all-crops-details", element: <AllCropsdetails /> },
     { path: "edit-crop/:id", element: <EditCrop /> },
     { path: "profile", element: <AdminProfile /> }
-
-   
-   
-
     
   ],
 },
@@ -163,6 +167,24 @@ const router = createBrowserRouter([
 {
   path: "/admin-login",
   element: <AdminLogin />,
+},
+
+
+
+// ✅ Doctor Admin Protected Panel
+{
+  path: "/admindoctor",
+  element: <DoctorRoute><DoctorLayout /></DoctorRoute>,
+  children: [
+    { index: true, element: <DoctorHome /> },
+    { path: "doctorwork", element: <DoctorWorkpanel /> },
+  ],
+},
+
+// ✅ Doctor Admin Login
+{
+  path: "/admin-login-doctor",
+  element: <DoctorLogin />,
 }
 
 ]);

@@ -690,30 +690,48 @@ app.put("/doctors/:id", upload.single("doctorImage"), async (req, res) => {
         res.status(500).json({ message: "Failed to fetch messages" });
       }
     });
-    // PATCH route all contact
-  app.patch('/api/contact/:id', async (req, res) => {
-    const { id } = req.params;
-    const { status } = req.body;
 
-    if (!status) {
-      return res.status(400).send({ message: 'Status is required' });
+  //update by doctor
+
+// ✅ PATCH route
+app.patch('/api/contact/:id', async (req, res) => {
+  try {
+    const id = req.params.id;
+    const { status, solvedBy } = req.body;
+
+    console.log("🔍 PATCH ID:", id);
+    console.log("📦 Body:", req.body);
+
+    if (!ObjectId.isValid(id)) {
+      return res.status(400).json({ message: 'Invalid ObjectId format' });
     }
 
-    try {
-      const result = await contactCollection.updateOne(
-        { _id: new ObjectId(id) },
-        { $set: { status } }
-      );
+    if (!userproblemCollection) {
+      return res.status(500).json({ message: 'MongoDB not connected' });
+    }
 
-      if (result.modifiedCount === 1) {
-        res.send({ message: 'Status updated successfully' });
-      } else {
-        res.status(404).send({ message: 'Message not found' });
+    const result = await userproblemCollection.updateOne(
+      { _id: new ObjectId(id) },
+      {
+        $set: {
+          status: status || 'solved',
+          solvedBy: solvedBy || 'Manual'
+        }
       }
-    } catch (err) {
-      res.status(500).send({ message: 'Update failed', error: err.message });
+    );
+
+    if (result.modifiedCount === 0) {
+      return res.status(404).json({ message: 'Problem not found or already solved' });
     }
-  });
+
+    res.status(200).json({ message: 'Problem marked as solved' });
+  } catch (error) {
+    console.error('❌ PATCH error:', error.message);
+    res.status(500).json({ message: 'Internal server error', error: error.message });
+  }
+});
+
+
 
     
     //common disease part
@@ -795,6 +813,19 @@ app.get("/admin/:email", async (req, res) => {
   }
 });
 
+// POST new review
+app.post("/reviews", async (req, res) => {
+  const { author, message } = req.body;
+  try {
+    const result = await reviewsCollection.insertOne({ author, message });
+    res.status(201).json({ message: "Review submitted", id: result.insertedId });
+  } catch (error) {
+    res.status(500).json({
+      message: "Failed to submit review",
+      error: error.message,
+    });
+  }
+});
 
 
 
@@ -811,7 +842,72 @@ app.get("/reviews", async (req, res) => {
     });
   }
 });
+// ✅ POST: Doctor Admin Login
+app.post("/api/doctor-login", async (req, res) => {
+  const { email, password } = req.body;
 
+  try {
+    const user = await userCollection.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({ success: false, message: "Doctor not found" });
+    }
+
+    // Check role and isAdmin
+    if (user.role !== "doctor" || user.isAdmin !== true) {
+      return res.status(403).json({ success: false, message: "Access denied: Not a doctor admin" });
+    }
+
+    if (user.password === password) {
+      res.status(200).json({
+        success: true,
+        message: "Doctor login successful",
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        isAdmin: user.isAdmin,
+        token: "mock-token-123", // Replace with real JWT later
+      });
+    } else {
+      res.status(401).json({ success: false, message: "Incorrect password" });
+    }
+  } catch (err) {
+    res.status(500).json({ success: false, message: "Server error", error: err.message });
+  }
+});
+//farmers registration
+app.post("/api/users", async (req, res) => {
+  const {
+    uid,
+    name,
+    email,
+    password,
+    role,
+    photoURL,
+    phone,
+    gender
+  } = req.body;
+
+  try {
+    const newUser = {
+      uid,
+      name,
+      email,
+      password,
+      role: role || "farmer",
+      phone: phone || "",
+      gender: gender || "unspecified",
+      profileImage: photoURL || "https://via.placeholder.com/100",
+      createdAt: new Date()
+    };
+
+    await userCollection.insertOne(newUser);
+    res.status(201).send({ message: "User saved", user: newUser });
+  } catch (err) {
+    res.status(500).send({ error: "Failed to save user", details: err.message });
+  }
+});
 
     await client.db("admin").command({ ping: 1 });
     console.log("MongoDB connection is healthy!");
@@ -819,6 +915,27 @@ app.get("/reviews", async (req, res) => {
     console.error("MongoDB connection error:", error.message);
   }
 }
+// PATCH: Update user by UID
+app.patch("/api/users/:uid", async (req, res) => {
+  const uid = req.params.uid;
+  const updateData = req.body;
+
+  try {
+    const result = await userCollection.updateOne(
+      { uid },
+      { $set: updateData }
+    );
+
+    if (result.matchedCount === 0) {
+      return res.status(404).send({ error: "User not found" });
+    }
+
+    res.send({ message: "User updated successfully", result });
+  } catch (err) {
+    res.status(500).send({ error: "Failed to update user", details: err.message });
+  }
+});
+
 
 
 
