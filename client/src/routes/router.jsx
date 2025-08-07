@@ -87,7 +87,7 @@ const router = createBrowserRouter([
       { path: "/about", Component: About },
       { path: "/weather-alerts", Component: WeatherMarket },
       { path:"/weatherdetails", Component:WeatherUpzila},
-      { path: "editprofile/:uid", element: <EditProfileFarmer /> },
+      { path: "editprofile/:id", element: <EditProfileFarmer /> },
 
       
       

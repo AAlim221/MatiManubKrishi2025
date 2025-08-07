@@ -909,34 +909,45 @@ app.post("/api/users", async (req, res) => {
   }
 });
 
+
+   
+// GET by UID for farmer
+app.get("/api/users/:uid", async (req, res) => {
+  const uid = req.params.uid;
+  const user = await userCollection.findOne({ uid });
+  if (!user) return res.status(404).send({ error: "User not found" });
+  res.send(user);
+});
+
+// PATCH update by UID
+app.patch("/api/users/:uid", async (req, res) => {
+  const uid = req.params.uid;
+  const result = await userCollection.updateOne({ uid }, { $set: req.body });
+  if (result.matchedCount === 0) return res.status(404).send({ error: "User not found" });
+  res.send({ message: "User updated successfully", result });
+});
+
+// GET full profile by email
+app.get("/admin/:email", async (req, res) => {
+  const email = req.params.email;
+  const admin = await userCollection.findOne({ email });
+  if (!admin) return res.status(404).send({ message: "Admin not found" });
+  res.send(admin);
+});
+
+
+
+
+
+
+
+
     await client.db("admin").command({ ping: 1 });
     console.log("MongoDB connection is healthy!");
   } catch (error) {
     console.error("MongoDB connection error:", error.message);
   }
 }
-// PATCH: Update user by UID
-app.patch("/api/users/:uid", async (req, res) => {
-  const uid = req.params.uid;
-  const updateData = req.body;
-
-  try {
-    const result = await userCollection.updateOne(
-      { uid },
-      { $set: updateData }
-    );
-
-    if (result.matchedCount === 0) {
-      return res.status(404).send({ error: "User not found" });
-    }
-
-    res.send({ message: "User updated successfully", result });
-  } catch (err) {
-    res.status(500).send({ error: "Failed to update user", details: err.message });
-  }
-});
-
-
 
 
 process.on("SIGINT", async () => {
