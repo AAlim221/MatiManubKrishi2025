@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
+import { jsPDF } from 'jspdf';
+import domtoimage from 'dom-to-image-more';
 
 const translations = {
   bn: {
@@ -16,7 +16,7 @@ const translations = {
     inputsTitle: "📝 আপনার ইনপুট:"
   },
   en: {
-    title: "🧪 Enter Soil Info & Get AI Advice",
+    title: "🧪 Enter Soil Info & Get Advice",
     typeLabel: "Soil Type",
     phLabel: "Soil pH (e.g. 6.5)",
     moistureLabel: "Moisture (%)",
@@ -44,19 +44,14 @@ const SoilAdvisor = () => {
   const resultRef = useRef();
 
   useEffect(() => {
-  fetch('/soilSuggestions_200.json')
-    .then(res => res.json())
-    .then(data => {
-      console.log("✅ Suggestions loaded:", data);
-      setAllSuggestions(data);
-    })
-    .catch(err => console.error('❌ JSON Load Error:', err));
-}, []);
-
-useEffect(() => {
-  console.log("📄 Result ref value:", resultRef.current);
-}, [suggestion]);
-
+    fetch('/soilSuggestions_200.json')
+      .then(res => res.json())
+      .then(data => {
+        console.log("✅ Suggestions loaded:", data);
+        setAllSuggestions(data);
+      })
+      .catch(err => console.error('❌ JSON Load Error:', err));
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -88,40 +83,34 @@ useEffect(() => {
     }
   };
 
- const handleExportPDF = async () => {
-  const input = resultRef.current;
+  const handleExportPDF = async () => {
+    if (!resultRef.current) {
+      alert("❌ Error: Nothing to export. Please generate a suggestion first.");
+      return;
+    }
 
-  if (!input) {
-    alert("❌ Error: Nothing to export. Please generate a suggestion first.");
-    return;
-  }
+    try {
+      const dataUrl = await domtoimage.toPng(resultRef.current, {
+        bgcolor: "#ffffff",
+        quality: 1,
+        style: {
+          transform: "scale(1)",
+          transformOrigin: "top left"
+        }
+      });
 
-  try {
-    // Slight delay to ensure DOM is fully ready
-    await new Promise((resolve) => setTimeout(resolve, 100));
+      const pdf = new jsPDF("p", "mm", "a4");
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (resultRef.current.offsetHeight * pdfWidth) / resultRef.current.offsetWidth;
 
-    // Force white background
-    input.style.backgroundColor = "#ffffff";
-
-    const canvas = await html2canvas(input, {
-      backgroundColor: "#ffffff", // Avoid transparent issues
-      scale: 2,
-      useCORS: true,
-    });
-
-    const imgData = canvas.toDataURL('image/png');
-    const pdf = new jsPDF('p', 'mm', 'a4');
-    const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-
-    pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-    pdf.save("SoilAdvisor_Suggestion.pdf");
-  } catch (err) {
-    console.error("❌ PDF generation failed:", err.message || err);
-    alert("❌ PDF creation failed. See console for details.");
-  }
-};
-
+      pdf.addImage(dataUrl, "PNG", 0, 0, pdfWidth, pdfHeight);
+      pdf.save("SoilAdvisor_Suggestion.pdf");
+    } catch (err) {
+      console.error("❌ PDF generation failed:", err);
+      alert("❌ PDF creation failed. See console for details.");
+    }
+  };
+  
 
   return (
     <div className="max-w-xl mx-auto p-6">

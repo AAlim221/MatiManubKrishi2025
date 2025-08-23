@@ -1,59 +1,70 @@
 import React from 'react';
 
+// Import images
+import alluvialSoil from '../assets/Soil/Alluvial soil.jpg';
+import claySoil from '../assets/Soil/Clay soil.jpg';
+import loamySoil from '../assets/Soil/loamy soil.jpg';
+import sandySoil from '../assets/Soil/Sandy soil.jpg';
+import siltSoil from '../assets/Soil/Silt soil.jpg';
+import peatSoil from '../assets/Soil/Peat Soil.jpg';
+import salineSoil from '../assets/Soil/Saline Soil.jpg';
+import redLaterecticSoil from '../assets/Soil/Red Laterectic Soil.jpg';
+import calcareousSoil from '../assets/Soil/Calcareous soil.jpg';
+
 const soilData = [
   {
     name: 'Alluvial Soil',
     region: 'Floodplains, Padma, Jamuna, Meghna basins',
     crops: ['Rice', 'Jute', 'Wheat', 'Sugarcane'],
-    image: 'https://source.unsplash.com/300x200/?rice-field',
+    image: alluvialSoil,
   },
   {
     name: 'Clayey Soil',
     region: 'Haor areas (Sylhet, Kishoreganj)',
     crops: ['Boro Rice', 'Lentils', 'Mustard'],
-    image: 'https://source.unsplash.com/300x200/?clay,mud',
+    image: claySoil,
   },
   {
     name: 'Loamy Soil',
     region: 'Central and Southwestern Bangladesh',
     crops: ['Vegetables', 'Potato', 'Maize', 'Sugarcane'],
-    image: 'https://source.unsplash.com/300x200/?vegetable-farm',
+    image: loamySoil,
   },
   {
     name: 'Sandy Soil',
     region: 'Coastal areas (Cox’s Bazar, Satkhira)',
     crops: ['Watermelon', 'Carrot', 'Groundnut'],
-    image: 'https://source.unsplash.com/300x200/?sand,coastal-farm',
+    image: sandySoil,
   },
   {
     name: 'Silt Soil',
     region: 'Deltaic areas (Chittagong, Barisal)',
     crops: ['Rice', 'Sugarcane', 'Turmeric'],
-    image: 'https://source.unsplash.com/300x200/?silt,rice',
+    image: siltSoil,
   },
   {
     name: 'Peat Soil',
     region: 'Wetlands (Gopalganj, Khulna, Sylhet)',
     crops: ['Jute', 'Rice', 'Coconut'],
-    image: 'https://source.unsplash.com/300x200/?peat,wetland',
+    image: peatSoil,
   },
   {
     name: 'Saline Soil',
     region: 'Coastal saline belt (Khulna, Bagerhat)',
     crops: ['Salt-tolerant Rice', 'Sunflower', 'Mustard'],
-    image: 'https://source.unsplash.com/300x200/?saline-farm',
+    image: salineSoil,
   },
   {
     name: 'Red Lateritic Soil',
     region: 'Hill Tracts, Madhupur',
     crops: ['Pineapple', 'Banana', 'Tea'],
-    image: 'https://source.unsplash.com/300x200/?red-soil,fruit-farm',
+    image: redLaterecticSoil,
   },
   {
     name: 'Calcareous Soil',
     region: 'Rajshahi, Natore, Nawabganj',
     crops: ['Wheat', 'Lentils', 'Maize'],
-    image: 'https://source.unsplash.com/300x200/?wheat-field',
+    image: calcareousSoil,
   }
 ];
 

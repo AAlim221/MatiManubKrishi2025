@@ -1,0 +1,207 @@
+[
+  {
+    "problem": "Low Nitrogen",
+    "suggestion": "Use Urea fertilizer to increase Nitrogen content.",
+    "fertilizers": [
+      { "name": "Urea", "ratio": "2:1" },
+      { "name": "Ammonium Nitrate", "ratio": "1:1" }
+    ]
+  },
+  {
+    "problem": "Low Phosphorus",
+    "suggestion": "Apply Superphosphate to improve Phosphorus levels.",
+    "fertilizers": [
+      { "name": "Superphosphate", "ratio": "1:1" },
+      { "name": "Diammonium Phosphate", "ratio": "2:1" }
+    ]
+  },
+  {
+    "problem": "Acidic Soil",
+    "suggestion": "Use Lime to raise the pH and reduce acidity.",
+    "fertilizers": [
+      { "name": "Lime", "ratio": "3:1" }
+    ]
+  },
+  {
+    "problem": "Saline Soil",
+    "suggestion": "Use Gypsum to reduce salinity levels.",
+    "fertilizers": [
+      { "name": "Gypsum", "ratio": "2:1" }
+    ]
+  },
+  {
+    "problem": "Iron Deficiency",
+    "suggestion": "Apply Iron Sulphate to address iron deficiency.",
+    "fertilizers": [
+      { "name": "Iron Sulphate", "ratio": "1:1" }
+    ]
+  },
+  {
+    "problem": "Calcium Deficiency",
+    "suggestion": "Calcium Nitrate should be used to correct Calcium deficiency.",
+    "fertilizers": [
+      { "name": "Calcium Nitrate", "ratio": "1:1" }
+    ]
+  },
+  {
+    "problem": "Magnesium Deficiency",
+    "suggestion": "Apply Epsom Salt to fix Magnesium deficiency.",
+    "fertilizers": [
+      { "name": "Epsom Salt", "ratio": "2:1" }
+    ]
+  },
+  {
+    "problem": "Phosphorus Toxicity",
+    "suggestion": "Reduce phosphorus levels by applying calcium-based fertilizers.",
+    "fertilizers": [
+      { "name": "Calcium Carbonate", "ratio": "3:1" }
+    ]
+  },
+  {
+    "problem": "Low Potassium",
+    "suggestion": "Use Potassium Chloride or Muriate of Potash to increase Potassium levels.",
+    "fertilizers": [
+      { "name": "Potassium Chloride", "ratio": "2:1" },
+      { "name": "Muriate of Potash", "ratio": "3:1" }
+    ]
+  },
+  {
+    "problem": "Waterlogging",
+    "suggestion": "Improve drainage and use Gypsum to reduce water retention.",
+    "fertilizers": [
+      { "name": "Gypsum", "ratio": "2:1" }
+    ]
+  },
+  {
+    "problem": "Low Organic Matter",
+    "suggestion": "Add Organic Compost to improve soil health and fertility.",
+    "fertilizers": [
+      { "name": "Compost", "ratio": "1:1" }
+    ]
+  },
+  {
+    "problem": "Nutrient Imbalance",
+    "suggestion": "Use a balanced NPK fertilizer to correct nutrient imbalance.",
+    "fertilizers": [
+      { "name": "NPK Fertilizer", "ratio": "1:1:1" }
+    ]
+  },
+  {
+    "problem": "Low Sulfur",
+    "suggestion": "Apply Sulfate of Potash to increase Sulfur levels.",
+    "fertilizers": [
+      { "name": "Sulfate of Potash", "ratio": "2:1" }
+    ]
+  },
+  {
+    "problem": "Sandy Soil",
+    "suggestion": "Improve water retention by using organic mulch and compost.",
+    "fertilizers": [
+      { "name": "Compost", "ratio": "1:1" },
+      { "name": "Organic Mulch", "ratio": "1:1" }
+    ]
+  },
+  {
+    "problem": "Clayey Soil",
+    "suggestion": "Incorporate organic matter like compost to improve drainage.",
+    "fertilizers": [
+      { "name": "Compost", "ratio": "1:1" }
+    ]
+  },
+  {
+    "problem": "Excessive Fertilizer Use",
+    "suggestion": "Flush the soil with water and avoid over-fertilization in the future.",
+    "fertilizers": []
+  },
+  {
+    "problem": "Alkaline Soil",
+    "suggestion": "Use elemental Sulfur to reduce pH levels in alkaline soils.",
+    "fertilizers": [
+      { "name": "Elemental Sulfur", "ratio": "1:1" }
+    ]
+  },
+  {
+    "problem": "Lack of Micronutrients",
+    "suggestion": "Apply Micronutrient Mix fertilizers to provide essential trace elements.",
+    "fertilizers": [
+      { "name": "Micronutrient Mix", "ratio": "1:1" }
+    ]
+  },
+  {
+    "problem": "Poor Aeration",
+    "suggestion": "Use coarse sand or organic material to improve aeration.",
+    "fertilizers": [
+      { "name": "Coarse Sand", "ratio": "2:1" },
+      { "name": "Organic Material", "ratio": "1:1" }
+    ]
+  },
+  {
+    "problem": "Excessive Sodium",
+    "suggestion": "Use Gypsum or Lime to neutralize sodium levels in the soil.",
+    "fertilizers": [
+      { "name": "Gypsum", "ratio": "2:1" },
+      { "name": "Lime", "ratio": "3:1" }
+    ]
+  },
+  {
+    "problem": "Manganese Deficiency",
+    "suggestion": "Apply Manganese Sulphate to improve manganese content.",
+    "fertilizers": [
+      { "name": "Manganese Sulphate", "ratio": "1:1" }
+    ]
+  },
+  {
+    "problem": "Boron Deficiency",
+    "suggestion": "Use Borax to correct Boron deficiency.",
+    "fertilizers": [
+      { "name": "Borax", "ratio": "1:1" }
+    ]
+  },
+  {
+    "problem": "Copper Deficiency",
+    "suggestion": "Use Copper Sulphate to address Copper deficiency.",
+    "fertilizers": [
+      { "name": "Copper Sulphate", "ratio": "1:1" }
+    ]
+  },
+  {
+    "problem": "Zinc Deficiency",
+    "suggestion": "Apply Zinc Sulphate to correct Zinc deficiency.",
+    "fertilizers": [
+      { "name": "Zinc Sulphate", "ratio": "1:1" }
+    ]
+  },
+  {
+    "problem": "Soil Erosion",
+    "suggestion": "Implement cover crops and organic mulches to prevent soil erosion.",
+    "fertilizers": [
+      { "name": "Cover Crops", "ratio": "1:1" },
+      { "name": "Organic Mulch", "ratio": "1:1" }
+    ]
+  },
+  {
+    "problem": "Soil Compaction",
+    "suggestion": "Use organic matter and deep tillage to alleviate soil compaction.",
+    "fertilizers": [
+      { "name": "Organic Matter", "ratio": "1:1" },
+      { "name": "Compost", "ratio": "1:1" }
+    ]
+  },
+  {
+    "problem": "Low Potassium and Magnesium",
+    "suggestion": "Use K-Mag or Sulfate of Potash to increase both Potassium and Magnesium.",
+    "fertilizers": [
+      { "name": "K-Mag", "ratio": "2:1" },
+      { "name": "Sulfate of Potash", "ratio": "1:1" }
+    ]
+  },
+  {
+    "problem": "Lack of Organic Material",
+    "suggestion": "Incorporate compost, green manure, or animal manure.",
+    "fertilizers": [
+      { "name": "Compost", "ratio": "2:1" },
+      { "name": "Green Manure", "ratio": "2:1" },
+      { "name": "Animal Manure", "ratio": "1:1" }
+    ]
+  }
+]

@@ -59,6 +59,7 @@ import DoctorHome from "../Pages/DoctorDashbroad/DoctorHome.jsx";
 import DoctorLogin from "../Pages/DoctorDashbroad/Doctorlogin.jsx";
 import DoctorRoute from "./DoctorRoute.jsx";
 import EditProfileFarmer from "../Components/EditProfileFarmer.jsx";
+import Fertilizer from "../Pages/Fertilizer.jsx";
 
 const router = createBrowserRouter([
   {
@@ -88,10 +89,8 @@ const router = createBrowserRouter([
       { path: "/weather-alerts", Component: WeatherMarket },
       { path:"/weatherdetails", Component:WeatherUpzila},
       { path: "editprofile/:id", element: <EditProfileFarmer /> },
+      { path: "fertilizer", element: <Fertilizer />},
 
-      
-      
-      
       
       // 🔒 Protected User Routes
       {
